@@ -1,0 +1,10 @@
+<div class="scroll-container" cdkScrollable>
+  @for (item of items(); track item.link) {
+    <div class="scroll-item">
+      <a [routerLink]="item.link">
+        <img [src]="item.imageUrl" alt="{{ item.name }}" />
+        <span>{{ item.name }}</span>
+      </a>
+    </div>
+  }
+</div>

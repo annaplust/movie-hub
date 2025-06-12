@@ -1,0 +1,38 @@
+@let movie = movieDetailsResource.value();
+@let cast = castResource.value();
+@let recommendations = recommendationsResource.value();
+@let externalIds = externalIdsResource.value();
+
+@if (movieDetailsResource.isLoading() || !movie) {
+  loading...
+} @else {
+  <h1>{{ movie.title }}</h1>
+  <!-- <img [src]="`https://image.tmdb.org/t/p/w300${movie.poster_path}`" /> -->
+  <div>
+    <h2>Genres</h2>
+    @for (genre of movie.genres; track genre) {
+      {{ MovieGenreTranslationMap[genre.id] }}
+    }
+  </div>
+}
+
+<h2>Cast</h2>
+@if (castResource.isLoading() || !cast) {
+  loading...
+} @else {
+  <app-horizontal-scroll-list [items]="cast"></app-horizontal-scroll-list>
+}
+
+<h2>Recommendations</h2>
+@if (recommendationsResource.isLoading() || !recommendations) {
+  loading...
+} @else {
+  <app-horizontal-scroll-list [items]="recommendations"></app-horizontal-scroll-list>
+}
+
+<h2>External ids</h2>
+@if (externalIdsResource.isLoading() || !externalIds) {
+  loading...
+} @else {
+  <a [href]="`https://www.imdb.com/title/${externalIds.imdb_id}`" target="_blank" rel="noopener noreferrer">IMDB</a>
+}

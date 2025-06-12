@@ -1,0 +1,11 @@
+:host {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.title {
+  display: flex;
+  gap: 8px;
+  font-size: 1.25rem;
+}

@@ -1,0 +1,18 @@
+<a routerLink="/" class="title">
+  <fa-icon [icon]="faClapperboard"></fa-icon>
+  <span>MovieHub</span>
+</a>
+
+<div>
+  <input type="text" pInputText placeholder="Movies, Shows, Actors" [(ngModel)]="searchPhrase" />
+  <p-button styleClass="search-clear-btn" (click)="onClearSearchPhrase()">
+    <fa-icon [icon]="faXmark" alt="clear"></fa-icon>
+  </p-button>
+  <p-button (click)="onSearch()">
+    <fa-icon [icon]="faMagnifyingGlass" alt="search"></fa-icon>
+  </p-button>
+</div>
+
+<div class="theme">
+  <p-toggleswitch [(ngModel)]="isDarkMode" (onChange)="onThemeChange()" />
+</div>

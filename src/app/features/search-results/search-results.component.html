@@ -1,0 +1,12 @@
+@if (multiSearchResource.isLoading()) {
+  loading...
+} @else {
+  @for (result of multiSearchResource.value(); track result.imageUrl) {
+    <a [routerLink]="[result.link]">
+      <img [src]="result.imageUrl" />
+      <p>{{ result.name }}</p>
+    </a>
+  } @empty {
+    No results
+  }
+}

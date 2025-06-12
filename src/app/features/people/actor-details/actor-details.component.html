@@ -1,0 +1,28 @@
+@let actor = actorDetailsResource.value();
+@let movieCredits = movieCreditsResource.value();
+@let tvCredits = tvCreditsResource.value();
+
+@if (actorDetailsResource.isLoading() || !actor) {
+  loading...
+} @else {
+  <h1>{{ actor.name }}</h1>
+  <img [src]="`https://image.tmdb.org/t/p/w300${actor.profile_path}`" />
+}
+
+<h2>Movies</h2>
+@if (movieCreditsResource.isLoading() || !movieCredits) {
+  loading...
+} @else {
+  @for (role of movieCredits; track role.id) {
+    <div>{{ role.title }}: {{ role.character }}</div>
+  }
+}
+
+<h2>TV Shows</h2>
+@if (tvCreditsResource.isLoading() || !tvCredits) {
+  loading...
+} @else {
+  @for (role of tvCredits; track role.id) {
+    <div>{{ role.name }}: {{ role.character }}</div>
+  }
+}

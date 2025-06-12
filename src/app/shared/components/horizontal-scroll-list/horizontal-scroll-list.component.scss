@@ -1,0 +1,21 @@
+.scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px 0;
+}
+
+.scroll-item {
+  display: inline-block;
+  margin: 0 10px;
+  min-width: 150px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.scroll-item img {
+  width: auto;
+  height: 200px;
+  border-radius: 8px;
+  display: block;
+  margin-bottom: 5px;
+}
