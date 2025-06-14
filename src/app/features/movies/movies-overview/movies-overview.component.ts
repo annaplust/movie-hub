@@ -12,7 +12,7 @@ export class MoviesOverviewComponent {
   private moviesService = inject(MoviesService);
 
   // Resources
-  trendingMoviesResource = this.moviesService.trendingMoviesResource;
+  trendingDayMoviesResource = this.moviesService.trendingDayMoviesResource;
   upcomingMoviesResource = this.moviesService.upcomingMoviesResource;
   nowPlayingMoviesResource = this.moviesService.nowPlayingMoviesResource;
 }

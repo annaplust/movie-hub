@@ -1,0 +1,5 @@
+@if (ids().imdb_id) {
+  <a [href]="`https://www.imdb.com/title/${ids().imdb_id}`" target="_blank" rel="noopener noreferrer" class="imdb">
+    <fa-icon [icon]="faImdb"></fa-icon>
+  </a>
+}

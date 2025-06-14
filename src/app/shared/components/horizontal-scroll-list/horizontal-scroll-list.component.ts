@@ -1,5 +1,4 @@
 import { Component, input } from '@angular/core';
-import { ScrollItem } from './scroll-item.model';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -9,5 +8,10 @@ import { RouterLink } from '@angular/router';
   styleUrl: './horizontal-scroll-list.component.scss',
 })
 export class HorizontalScrollListComponent {
-  items = input.required<ScrollItem[]>();
+  items = input.required<any[]>();
+  size = input<'sm' | 'md' | 'lg'>('md');
+  route = input.required<string>();
+  image = input<string | null>(null);
+  header = input<string | null>(null);
+  subheader = input<string | null>(null);
 }

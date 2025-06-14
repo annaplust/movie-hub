@@ -1,21 +1,46 @@
-.scroll-container {
+.scroll {
   overflow-x: auto;
   white-space: nowrap;
   padding: 10px 0;
-}
+  display: flex;
+  gap: 16px;
 
-.scroll-item {
-  display: inline-block;
-  margin: 0 10px;
-  min-width: 150px;
-  cursor: pointer;
-  text-align: center;
-}
+  &__item {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #fff;
+    width: 150px;
 
-.scroll-item img {
-  width: auto;
-  height: 200px;
-  border-radius: 8px;
-  display: block;
-  margin-bottom: 5px;
+    img {
+      width: 150px;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+      margin-bottom: 5px;
+
+      &.sm {
+        width: 120px;
+      }
+
+      &.md {
+        width: 150px;
+      }
+
+      &.lg {
+        width: 220px;
+      }
+    }
+
+    .header,
+    .subheader {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .subheader {
+      font-size: 0.825rem;
+    }
+  }
 }

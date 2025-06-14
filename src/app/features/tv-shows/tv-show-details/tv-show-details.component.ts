@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TvShowGenre, TvShowGenreTranslationMap } from '@core/models/tv-show-genre.model';
+import { Genre, GenreTranslationMap } from '@core/models/genre.model';
 import { TvService } from '@core/services/tv.service';
 import { HorizontalScrollListComponent } from '@shared/components/horizontal-scroll-list/horizontal-scroll-list.component';
 
@@ -21,8 +21,8 @@ export class TvShowDetailsComponent {
   externalIdsResource = this.tvService.externalIdsResource;
 
   // Imports
-  TvShowGenre = TvShowGenre;
-  TvShowGenreTranslationMap = TvShowGenreTranslationMap;
+  Genre = Genre;
+  GenreTranslationMap = GenreTranslationMap;
 
   ngOnInit(): void {
     this.route.params.subscribe((routeParams) => {

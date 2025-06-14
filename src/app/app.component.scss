@@ -1,0 +1,13 @@
+:host {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 56px auto;
+}
+
+app-navbar {
+  z-index: 100;
+}
+
+.content {
+  width: 100vw;
+}

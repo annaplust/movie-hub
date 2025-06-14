@@ -1,18 +1,34 @@
 <a routerLink="/" class="title">
-  <fa-icon [icon]="faClapperboard"></fa-icon>
-  <span>MovieHub</span>
+  <span>MHDB</span>
 </a>
 
-<div>
-  <input type="text" pInputText placeholder="Movies, Shows, Actors" [(ngModel)]="searchPhrase" />
-  <p-button styleClass="search-clear-btn" (click)="onClearSearchPhrase()">
-    <fa-icon [icon]="faXmark" alt="clear"></fa-icon>
-  </p-button>
-  <p-button (click)="onSearch()">
-    <fa-icon [icon]="faMagnifyingGlass" alt="search"></fa-icon>
-  </p-button>
+<div class="links">
+  <a routerLink="/movies" routerLink="/movies">Movies</a>
+  <a routerLink="/movies" routerLink="/tv">TV Shows</a>
 </div>
 
-<div class="theme">
+<!-- <div class="theme">
   <p-toggleswitch [(ngModel)]="isDarkMode" (onChange)="onThemeChange()" />
+</div> -->
+
+<div class="search">
+  <div class="search__field">
+    <p-iconfield>
+      <input pInputText placeholder="Movies, Shows, Actors" type="text" pSize="small" [(ngModel)]="searchPhrase" />
+      @if (searchPhrase) {
+        <p-button
+          variant="text"
+          severity="secondary"
+          size="small"
+          styleClass="search-clear-btn"
+          (click)="onClearSearchPhrase()"
+        >
+          <fa-icon [icon]="faXmark" alt="clear"></fa-icon>
+        </p-button>
+      }
+    </p-iconfield>
+  </div>
+  <p-button size="small" (click)="onSearch()">
+    <fa-icon [icon]="faMagnifyingGlass" alt="search"></fa-icon>
+  </p-button>
 </div>

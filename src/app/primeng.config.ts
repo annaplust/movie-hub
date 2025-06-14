@@ -17,12 +17,16 @@ export const Noir = definePreset(Lara, {
       950: '{amber.950}',
     },
     colorScheme: {
+      surface: {
+        // 0: 'rgba(250, 250, 250, .16)',
+      },
       light: {
         primary: {
           color: '{amber.500}',
           inverseColor: '{zinc.700}',
           hoverColor: '{amber.400}',
           activeColor: '{amber.100}',
+          background: 'rgba(250, 250, 250, .16)',
         },
         highlight: {
           background: '{amber.950}',
@@ -49,12 +53,6 @@ export const Noir = definePreset(Lara, {
           focusBackground: 'rgba(250, 250, 250, .24)',
           color: 'rgba(255,255,255,.87)',
           focusColor: 'rgba(255,255,255,.87)',
-        },
-        surface: {
-          0: '#ffffff',
-          50: '#f7fafd',
-          100: '#f1f5f9',
-          200: '#f5f6ff',
         },
       },
     },

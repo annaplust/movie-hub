@@ -1,0 +1,12 @@
+<h2>Trending today</h2>
+@if (!trendingTvShows.isLoading()) {
+  <app-horizontal-scroll-list
+    [items]="trendingTvShows.value()"
+    image="poster_path"
+    header="name"
+    route="/tv"
+    size="lg"
+  ></app-horizontal-scroll-list>
+} @else {
+  loading...
+}

@@ -1,6 +1,12 @@
-<h2>Trending movies today</h2>
-@if (!trendingMoviesResource.isLoading()) {
-  <app-horizontal-scroll-list [items]="trendingMoviesResource.value()"></app-horizontal-scroll-list>
+<h2>Trending today</h2>
+@if (!trendingDayMoviesResource.isLoading()) {
+  <app-horizontal-scroll-list
+    [items]="trendingDayMoviesResource.value()"
+    image="poster_path"
+    header="title"
+    route="/movie"
+    size="lg"
+  ></app-horizontal-scroll-list>
 } @else {
   loading...
 }

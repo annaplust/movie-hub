@@ -1,10 +1,15 @@
-<div class="scroll-container" cdkScrollable>
-  @for (item of items(); track item.link) {
-    <div class="scroll-item">
-      <a [routerLink]="item.link">
-        <img [src]="item.imageUrl" alt="{{ item.name }}" />
-        <span>{{ item.name }}</span>
-      </a>
-    </div>
+<div class="scroll" cdkScrollable>
+  @for (item of items(); track item.id) {
+    <a class="scroll__item" [routerLink]="[route(), item.id]">
+      @if (image()) {
+        <img [src]="item[image()!]" [class]="size()" />
+      }
+      @if (header()) {
+        <span class="header">{{ item[header()!] }}</span>
+      }
+      @if (subheader()) {
+        <span class="subheader">{{ item[subheader()!] }}</span>
+      }
+    </a>
   }
 </div>

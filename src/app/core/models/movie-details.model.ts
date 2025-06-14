@@ -14,7 +14,9 @@ export interface MovieDetails {
   popularity: number;
   poster_path: string;
   production_companies: ProductionCompany[];
+  production_companies_names: string;
   production_countries: ProductionCountry[];
+  production_countries_names: string;
   release_date: string; // ISO date string
   revenue: number;
   runtime: number; // in minutes

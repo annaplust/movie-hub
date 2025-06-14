@@ -11,7 +11,7 @@
 
   <h2>Genres</h2>
   @for (genre of show.genres; track genre) {
-    {{ TvShowGenreTranslationMap[genre.id] }}
+    {{ GenreTranslationMap[genre.id] }}
   }
 }
 
@@ -19,14 +19,19 @@
 @if (castResource.isLoading() || !cast) {
   loading...
 } @else {
-  <app-horizontal-scroll-list [items]="cast"></app-horizontal-scroll-list>
+  <app-horizontal-scroll-list [items]="cast" image="poster_path" header="name" route="/tv"></app-horizontal-scroll-list>
 }
 
 <h2>Recommendations</h2>
 @if (recommendationsResource.isLoading() || !recommendations) {
   loading...
 } @else {
-  <app-horizontal-scroll-list [items]="recommendations"></app-horizontal-scroll-list>
+  <app-horizontal-scroll-list
+    [items]="recommendations"
+    image="poster_path"
+    header="name"
+    route="/tv"
+  ></app-horizontal-scroll-list>
 }
 
 <h2>External ids</h2>

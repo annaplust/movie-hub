@@ -1,38 +1,130 @@
 @let movie = movieDetailsResource.value();
-@let cast = castResource.value();
+@let credits = creditsResource.value();
 @let recommendations = recommendationsResource.value();
 @let externalIds = externalIdsResource.value();
 
 @if (movieDetailsResource.isLoading() || !movie) {
   loading...
 } @else {
-  <h1>{{ movie.title }}</h1>
-  <!-- <img [src]="`https://image.tmdb.org/t/p/w300${movie.poster_path}`" /> -->
-  <div>
-    <h2>Genres</h2>
-    @for (genre of movie.genres; track genre) {
-      {{ MovieGenreTranslationMap[genre.id] }}
-    }
+  <div
+    class="banner"
+    [style.backgroundImage]="
+      'url(' + 'https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/' + movie.backdrop_path + ')'
+    "
+  >
+    <div class="banner__overlay"></div>
+  </div>
+
+  <div class="info">
+    <div class="info__poster">
+      <img [src]="`https://image.tmdb.org/t/p/w300${movie.poster_path}`" />
+    </div>
+
+    <div class="info__panel">
+      <h1 class="info__title">{{ movie.title }}</h1>
+
+      <div class="info__subheader">
+        <span class="info__subheader__year">{{ movie.release_date | date: 'yyyy' }}</span>
+        &#183;
+        <span class="info__subheader__duration">{{ movie.runtime }} min</span>
+      </div>
+
+      <div class="info__rating">
+        <div class="info__rating__value">
+          <fa-icon [icon]="faStar"></fa-icon>
+          <span> {{ movie.vote_average | number: '1.1-1' }}</span>
+        </div>
+        <div class="info__rating__count">({{ movie.vote_count }})</div>
+      </div>
+
+      <div class="info__genres">
+        @for (genre of movie.genres; track genre) {
+          <div class="info__genres__item">{{ GenreTranslationMap[genre.id] }}</div>
+        }
+      </div>
+
+      <div class="info__overview">
+        {{ movie.overview }}
+      </div>
+
+      @if (!externalIdsResource.isLoading() && !!externalIds) {
+        <app-external-links [ids]="externalIds"></app-external-links>
+      }
+    </div>
   </div>
 }
 
-<h2>Cast</h2>
-@if (castResource.isLoading() || !cast) {
-  loading...
-} @else {
-  <app-horizontal-scroll-list [items]="cast"></app-horizontal-scroll-list>
-}
+<div class="content">
+  <h2>Cast</h2>
+  @if (creditsResource.isLoading() || !credits) {
+    loading...
+  } @else {
+    <app-horizontal-scroll-list
+      [items]="credits.cast"
+      image="profile_path"
+      header="name"
+      subheader="character"
+      route="/person"
+    ></app-horizontal-scroll-list>
+  }
 
-<h2>Recommendations</h2>
-@if (recommendationsResource.isLoading() || !recommendations) {
-  loading...
-} @else {
-  <app-horizontal-scroll-list [items]="recommendations"></app-horizontal-scroll-list>
-}
+  <h2>Crew</h2>
+  @if (creditsResource.isLoading() || !credits) {
+    loading...
+  } @else {
+    <p-table [value]="credits.crew">
+      <ng-template #header>
+        <tr>
+          <th>Job</th>
+          <th>Name</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-crew>
+        <tr>
+          <td>{{ crew.job }}</td>
+          <td>{{ crew.name }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
 
-<h2>External ids</h2>
-@if (externalIdsResource.isLoading() || !externalIds) {
-  loading...
-} @else {
-  <a [href]="`https://www.imdb.com/title/${externalIds.imdb_id}`" target="_blank" rel="noopener noreferrer">IMDB</a>
-}
+  <h2>Details</h2>
+  <div class="details">
+    @if (movieDetailsResource.isLoading() || !movie) {
+      loading...
+    } @else {
+      <div>
+        <span>Premiere</span>
+        <span>{{ movie.release_date }}</span>
+      </div>
+      <div>
+        <span>Revenue</span>
+        <span>{{ movie.revenue | currency: 'USD' : 'symbol-narrow' }}</span>
+      </div>
+      <div>
+        <span>Budget</span>
+        <span>{{ movie.budget | currency: 'USD' : 'symbol-narrow' }}</span>
+      </div>
+      <div>
+        <span>Production companies</span>
+        <span>{{ movie.production_companies_names }}</span>
+      </div>
+      <div>
+        <span>Production countries</span>
+        <span>{{ movie.production_countries_names }}</span>
+      </div>
+    }
+  </div>
+
+  <h2>Recommendations</h2>
+  @if (recommendationsResource.isLoading() || !recommendations) {
+    loading...
+  } @else {
+    <app-horizontal-scroll-list
+      [items]="recommendations"
+      image="poster_path"
+      header="title"
+      route="/movie"
+    ></app-horizontal-scroll-list>
+  }
+</div>

@@ -6,10 +6,22 @@ import { faClapperboard, faMagnifyingGlass, faXmark } from '@fortawesome/free-so
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 
 @Component({
   selector: 'app-navbar',
-  imports: [FontAwesomeModule, ToggleSwitchModule, FormsModule, InputTextModule, ButtonModule, RouterModule],
+  imports: [
+    FontAwesomeModule,
+    ToggleSwitchModule,
+    FormsModule,
+    InputTextModule,
+    ButtonModule,
+    RouterModule,
+    IconFieldModule,
+    InputIconModule,
+    ButtonModule,
+  ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })

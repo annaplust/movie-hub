@@ -1,11 +1,12 @@
-import { Injectable, Signal, signal } from '@angular/core';
-import { Movie } from '@core/models/movie.model';
-import { environment } from '@environments/environment';
 import { httpResource } from '@angular/common/http';
-import { ScrollItem } from '@shared/components/horizontal-scroll-list/scroll-item.model';
-import { MovieDetails } from '@core/models/movie-details.model';
+import { Injectable, signal } from '@angular/core';
 import { CastMember, Credits } from '@core/models/credit.model';
 import { ExternalIds } from '@core/models/external-ids.model';
+import { MovieDetails } from '@core/models/movie-details.model';
+import { Movie } from '@core/models/movie.model';
+import { environment } from '@environments/environment';
+
+const keywords = ['producer', 'screenplay', 'novel', 'director'];
 
 @Injectable({
   providedIn: 'root',
@@ -13,80 +14,86 @@ import { ExternalIds } from '@core/models/external-ids.model';
 export class MoviesService {
   id = signal(null);
 
-  trendingMoviesResource = httpResource<ScrollItem[]>(() => `${environment.api.url}/trending/movie/day`, {
+  trendingDayMoviesResource = httpResource<Movie[]>(() => `${environment.api.url}/trending/movie/day`, {
     defaultValue: [],
     parse: (data) => {
-      return (data as { results: Movie[] }).results.map((movie) => {
-        return {
-          imageUrl: movie.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : null,
-          name: movie.title,
-          link: `/movie/${movie.id}`,
-        };
+      (data as { results: Movie[] }).results.forEach((movie) => {
+        movie.poster_path = `https://image.tmdb.org/t/p/w300${movie.poster_path}`;
       });
+      return (data as { results: Movie[] }).results;
     },
   });
 
-  upcomingMoviesResource = httpResource<ScrollItem[]>(() => `${environment.api.url}/movie/upcoming`, {
+  trendingWeekMoviesResource = httpResource<Movie[]>(() => `${environment.api.url}/trending/movie/week`, {
     defaultValue: [],
     parse: (data) => {
-      return (data as { results: Movie[] }).results.map((movie) => {
-        return {
-          imageUrl: movie.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : null,
-          name: movie.title,
-          link: `/movie/${movie.id}`,
-        };
-      });
+      return (data as { results: Movie[] }).results;
     },
   });
 
-  nowPlayingMoviesResource = httpResource<ScrollItem[]>(() => `${environment.api.url}/movie/now_playing`, {
+  upcomingMoviesResource = httpResource<Movie[]>(() => `${environment.api.url}/movie/upcoming`, {
     defaultValue: [],
     parse: (data) => {
-      return (data as { results: Movie[] }).results.map((movie) => {
-        return {
-          imageUrl: movie.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : null,
-          name: movie.title,
-          link: `/movie/${movie.id}`,
-        };
+      (data as { results: Movie[] }).results.forEach((movie) => {
+        movie.poster_path = `https://image.tmdb.org/t/p/w300${movie.poster_path}`;
       });
+      return (data as { results: Movie[] }).results;
     },
   });
 
-  movieDetailsResource = httpResource<MovieDetails>(() =>
-    this.id() ? `${environment.api.url}/movie/${this.id()}` : undefined,
-  );
-  externalIdsResource = httpResource<ExternalIds>(() =>
-    this.id() ? `${environment.api.url}/movie/${this.id()}/external_ids` : undefined,
-  );
+  nowPlayingMoviesResource = httpResource<Movie[]>(() => `${environment.api.url}/movie/now_playing`, {
+    defaultValue: [],
+    parse: (data) => {
+      (data as { results: Movie[] }).results.forEach((movie) => {
+        movie.poster_path = `https://image.tmdb.org/t/p/w300${movie.poster_path}`;
+      });
+      return (data as { results: Movie[] }).results;
+    },
+  });
 
-  castResource = httpResource<ScrollItem[]>(
-    () => (this.id() ? `${environment.api.url}/movie/${this.id()}/credits` : undefined),
+  movieDetailsResource = httpResource<MovieDetails>(
+    () => (this.id() ? `${environment.api.url}/movie/${this.id()}` : undefined),
     {
-      defaultValue: [],
+      defaultValue: undefined,
       parse: (data) => {
-        return (data as Credits).cast.slice(0, 9).map((actor) => {
-          return {
-            imageUrl: actor.profile_path ? `https://image.tmdb.org/t/p/w300${actor.profile_path}` : null,
-            name: actor.name,
-            link: `/person/${actor.id}`,
-          };
-        });
+        const details = data as MovieDetails;
+        details.production_companies_names = details.production_companies.map((c) => c.name).join(', ');
+        details.production_countries_names = details.production_countries.map((c) => c.name).join(', ');
+        return data as MovieDetails;
       },
     },
   );
 
-  recommendationsResource = httpResource<ScrollItem[]>(
+  externalIdsResource = httpResource<ExternalIds>(() =>
+    this.id() ? `${environment.api.url}/movie/${this.id()}/external_ids` : undefined,
+  );
+
+  creditsResource = httpResource<Credits>(
+    () => (this.id() ? `${environment.api.url}/movie/${this.id()}/credits` : undefined),
+    {
+      defaultValue: undefined,
+      parse: (data) => {
+        (data as Credits).cast.forEach((actor) => {
+          actor.profile_path = `https://media.themoviedb.org/t/p/w120_and_h133_face/${actor.profile_path}`;
+        });
+        (data as Credits).crew = (data as Credits).crew.filter((crew) => keywords.includes(crew.job.toLowerCase()));
+        (data as Credits).crew.forEach((actor) => {
+          actor.profile_path = `https://media.themoviedb.org/t/p/w120_and_h133_face/${actor.profile_path}`;
+        });
+        return data as Credits;
+      },
+    },
+  );
+
+  recommendationsResource = httpResource<Movie[]>(
     () => (this.id() ? `${environment.api.url}/movie/${this.id()}/recommendations` : undefined),
     {
       defaultValue: [],
       parse: (data) => {
-        return (data as { results: Movie[] }).results.map((movie) => {
-          return {
-            imageUrl: movie.poster_path ? `https://image.tmdb.org/t/p/w300${movie.poster_path}` : null,
-            name: movie.title,
-            link: `/movie/${movie.id}`,
-          };
+        (data as { results: Movie[] }).results.forEach((movie) => {
+          movie.poster_path = `https://image.tmdb.org/t/p/w300${movie.poster_path}`;
         });
+        return (data as { results: Movie[] }).results;
       },
     },
   );

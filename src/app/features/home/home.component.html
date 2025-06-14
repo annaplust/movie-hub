@@ -1,14 +1,39 @@
-<p-tabs value="0">
-  <p-tablist>
-    <p-tab value="0">Movies</p-tab>
-    <p-tab value="1">Tv</p-tab>
-  </p-tablist>
-  <p-tabpanels>
-    <p-tabpanel value="0">
-      <app-movies-overview></app-movies-overview>
-    </p-tabpanel>
-    <p-tabpanel value="1">
-      <app-tv-shows-overview></app-tv-shows-overview>
-    </p-tabpanel>
-  </p-tabpanels>
-</p-tabs>
+@let trendingMovies = trendingWeekMoviesResource.value();
+@let nowPlayingMovies = nowPlayingMoviesResource.value();
+@let upcomingMovies = upcomingMoviesResource.value();
+
+@if (trendingWeekMoviesResource.isLoading()) {
+  loading...
+} @else {
+  <app-banner [movies]="trendingMovies"></app-banner>
+}
+
+<div class="content">
+  <div class="content__area">
+    <h2>In theaters</h2>
+    @if (nowPlayingMoviesResource.isLoading()) {
+      loading...
+    } @else {
+      <app-horizontal-scroll-list
+        [items]="nowPlayingMovies"
+        image="poster_path"
+        header="title"
+        route="/movie"
+      ></app-horizontal-scroll-list>
+    }
+  </div>
+
+  <div class="content__area">
+    <h2>Coming soon</h2>
+    @if (upcomingMoviesResource.isLoading()) {
+      loading...
+    } @else {
+      <app-horizontal-scroll-list
+        [items]="upcomingMovies"
+        image="poster_path"
+        header="title"
+        route="/movie"
+      ></app-horizontal-scroll-list>
+    }
+  </div>
+</div>

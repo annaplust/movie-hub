@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
+import { DividerModule } from 'primeng/divider';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NavbarComponent],
+  imports: [RouterOutlet, NavbarComponent, DividerModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

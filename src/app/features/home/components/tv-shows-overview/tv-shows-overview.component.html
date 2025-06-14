@@ -1,6 +1,0 @@
-<h2>Trending tv shows today</h2>
-@if (!trendingTvShows.isLoading()) {
-  <app-horizontal-scroll-list [items]="trendingTvShows.value()"></app-horizontal-scroll-list>
-} @else {
-  loading...
-}

@@ -12,7 +12,7 @@ import { ScrollItem } from '@shared/components/horizontal-scroll-list/scroll-ite
 export class PeopleService {
   id = signal(null);
 
-  trendingMoviesResource = httpResource<ScrollItem[]>(() => `${environment.api.url}/trending/person/day`, {
+  trendingDayMoviesResource = httpResource<ScrollItem[]>(() => `${environment.api.url}/trending/person/day`, {
     defaultValue: [],
     parse: (data) => {
       return (data as { results: Person[] }).results.map((show) => {

@@ -1,11 +1,72 @@
 :host {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px;
+  margin: 0;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 92px auto auto;
+  gap: 16px;
+  align-items: center;
+  justify-items: center;
+
+  ::ng-deep {
+    .search-clear-btn {
+      padding: 5px;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }
 }
 
 .title {
+  justify-self: start;
+  background-color: var(--p-primary-500);
+  border-radius: 8px;
   display: flex;
   gap: 8px;
   font-size: 1.25rem;
+  padding: 8px 10px;
+  color: var(--p-surface-700);
+  font-weight: 800;
+}
+
+.links {
+  justify-self: start;
+  display: flex;
+  gap: 16px;
+  font-weight: 600;
+  a {
+    color: #ffffff;
+  }
+}
+
+.search {
+  display: none;
+  justify-self: end;
+  gap: 4px;
+  --p-inputtext-background: transparent;
+  --p-inputtext-border-color: #ffffff;
+  --p-inputtext-color: #ffffff;
+  --p-button-text-secondary-color: #ffffff;
+  --p-inputtext-placeholder-color: #ffffff;
+
+  &__field {
+    p-button {
+      position: absolute;
+      right: 4px;
+      z-index: 1000;
+      top: 3px;
+      color: #ffffff;
+    }
+  }
+}
+
+.theme {
+  justify-self: end;
+}
+
+@media (min-width: 769px) {
+  .search {
+    display: flex;
+  }
 }
