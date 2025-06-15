@@ -43,7 +43,7 @@ export class MoviesService {
     () => `${this.apiUrl}/trending/movie/week?language=${this.currentLanguage()}`,
     {
       defaultValue: [],
-      parse: (data) => this.parseMovieResults(data as ApiResponse<Movie>),
+      parse: (data) => this.parseMovieResults(data as ApiResponse<Movie>).splice(0, 10),
     },
   );
 

@@ -7,10 +7,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faChevronLeft, faChevronRight, faStar } from '@fortawesome/free-solid-svg-icons';
 import { TranslateModule } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
+import { CarouselModule } from 'primeng/carousel';
 
 @Component({
   selector: 'app-banner',
-  imports: [CommonModule, DatePipe, ButtonModule, FontAwesomeModule, RouterModule, TranslateModule],
+  imports: [CommonModule, DatePipe, ButtonModule, FontAwesomeModule, RouterModule, TranslateModule, CarouselModule],
   templateUrl: './banner.component.html',
   styleUrl: './banner.component.scss',
 })
@@ -25,14 +26,4 @@ export class BannerComponent {
   // Imports
   Genre = Genre;
   GenreTranslationMap = GenreTranslationMap;
-
-  currentIndex = 0;
-
-  prev() {
-    this.currentIndex = this.currentIndex === 0 ? this.movies().length - 1 : this.currentIndex - 1;
-  }
-
-  next() {
-    this.currentIndex = this.currentIndex === this.movies().length - 1 ? 0 : this.currentIndex + 1;
-  }
 }
