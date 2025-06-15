@@ -108,6 +108,13 @@ h2:not(:first-of-type) {
   }
 }
 
+@media (min-width: 1400px) {
+  .info {
+    max-width: 1400px;
+    left: calc(-1400px / 2 + 100vw / 2);
+  }
+}
+
 @media (min-width: 769px) {
   .banner {
     position: relative;
@@ -137,7 +144,7 @@ h2:not(:first-of-type) {
     gap: 32px;
     padding: 48px 64px;
     position: absolute;
-    top: 48px;
+    top: 108px;
     margin-top: 0;
 
     &__panel {

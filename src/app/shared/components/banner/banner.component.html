@@ -15,7 +15,7 @@
       </div>
       <div class="genres">
         @for (genre of movies()[currentIndex].genre_ids; track genre) {
-          <div class="genres__item">{{ GenreTranslationMap[genre] }}</div>
+          <div class="genres__item">{{ GenreTranslationMap[genre] | translate }}</div>
         }
       </div>
       <div class="title">{{ movies()[currentIndex].title }}</div>

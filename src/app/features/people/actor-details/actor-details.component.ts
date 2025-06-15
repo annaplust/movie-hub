@@ -1,10 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PeopleService } from '@core/services/people.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-actor-details',
-  imports: [],
+  imports: [TranslateModule],
   templateUrl: './actor-details.component.html',
   styleUrl: './actor-details.component.scss',
 })

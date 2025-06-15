@@ -1,21 +1,21 @@
-@let trendingMovies = trendingWeekMoviesResource.value();
-@let nowPlayingMovies = nowPlayingMoviesResource.value();
-@let upcomingMovies = upcomingMoviesResource.value();
+@let trending = trendingWeekMovies.value();
+@let nowPlaying = nowPlayingMovies.value();
+@let upcoming = upcomingMovies.value();
 
-@if (trendingWeekMoviesResource.isLoading()) {
+@if (trendingWeekMovies.isLoading()) {
   loading...
 } @else {
-  <app-banner [movies]="trendingMovies"></app-banner>
+  <app-banner [movies]="trending"></app-banner>
 }
 
 <div class="content">
   <div class="content__area">
-    <h2>In theaters</h2>
-    @if (nowPlayingMoviesResource.isLoading()) {
+    <h2>{{ 'inTheatres' | translate }}</h2>
+    @if (nowPlayingMovies.isLoading()) {
       loading...
     } @else {
       <app-horizontal-scroll-list
-        [items]="nowPlayingMovies"
+        [items]="nowPlaying"
         image="poster_path"
         header="title"
         route="/movie"
@@ -24,12 +24,12 @@
   </div>
 
   <div class="content__area">
-    <h2>Coming soon</h2>
-    @if (upcomingMoviesResource.isLoading()) {
+    <h2>{{ 'comingSoon' | translate }}</h2>
+    @if (upcomingMovies.isLoading()) {
       loading...
     } @else {
       <app-horizontal-scroll-list
-        [items]="upcomingMovies"
+        [items]="upcoming"
         image="poster_path"
         header="title"
         route="/movie"

@@ -1,7 +1,7 @@
 <h2>Trending today</h2>
-@if (!trendingTvShows.isLoading()) {
+@if (!trendingWeekTvShows.isLoading()) {
   <app-horizontal-scroll-list
-    [items]="trendingTvShows.value()"
+    [items]="trendingWeekTvShows.value()"
     image="poster_path"
     header="name"
     route="/tv"

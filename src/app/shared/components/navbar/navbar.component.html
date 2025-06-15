@@ -32,3 +32,13 @@
     <fa-icon [icon]="faMagnifyingGlass" alt="search"></fa-icon>
   </p-button>
 </div>
+
+<div class="language">
+  <p-select
+    [options]="languages"
+    [(ngModel)]="selectedLanguage"
+    optionLabel="name"
+    size="small"
+    (onChange)="onLanguageChange()"
+  />
+</div>

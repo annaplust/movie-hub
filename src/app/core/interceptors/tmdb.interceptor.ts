@@ -1,5 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { environment } from '@environments/environment';
+import { TranslateService } from '@ngx-translate/core';
 
 const baseUrl = environment.api.url;
 const apiKey = environment.api.key;
@@ -13,7 +15,6 @@ export const tmdbInterceptor: HttpInterceptorFn = (req, next) => {
     // Append query params api_key and language
     let params = req.params;
     params = params.set('api_key', apiKey);
-    params = params.set('language', 'en-US');
 
     // Clone the request with updated headers and params
     const clonedRequest = req.clone({

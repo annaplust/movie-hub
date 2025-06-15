@@ -2,7 +2,7 @@
   margin: 0;
   padding: 16px;
   display: grid;
-  grid-template-columns: 92px auto auto;
+  grid-template-columns: 92px auto auto 72px;
   gap: 16px;
   align-items: center;
   justify-items: center;
@@ -14,6 +14,15 @@
       &:hover {
         background-color: transparent;
       }
+    }
+
+    .p-select {
+      background-color: transparent;
+      border-color: #fff;
+    }
+
+    .p-select-label {
+      padding-right: 0;
     }
   }
 }
@@ -61,6 +70,9 @@
   }
 }
 
+.language {
+}
+
 .theme {
   justify-self: end;
 }
@@ -68,5 +80,17 @@
 @media (min-width: 769px) {
   .search {
     display: flex;
+  }
+  :host {
+    padding-left: 64px;
+    padding-right: 64px;
+  }
+}
+
+@media (min-width: 1400px) {
+  :host {
+    padding-left: 16px;
+    width: 1300px;
+    margin: auto;
   }
 }

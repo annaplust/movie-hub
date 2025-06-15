@@ -1,7 +1,7 @@
-<h2>Trending today</h2>
-@if (!trendingDayMoviesResource.isLoading()) {
+<h2>{{ 'trendingToday' | translate }}</h2>
+@if (!trendingDayMovies.isLoading()) {
   <app-horizontal-scroll-list
-    [items]="trendingDayMoviesResource.value()"
+    [items]="trendingDayMovies.value()"
     image="poster_path"
     header="title"
     route="/movie"
@@ -11,16 +11,16 @@
   loading...
 }
 
-<!-- <h2>Upcoming movies</h2>
-@if (!upcomingMoviesResource.isLoading()) {
-  <app-horizontal-scroll-list [items]="upcomingMoviesResource.value()"></app-horizontal-scroll-list>
+<!-- <h2>{{ 'comingSoon' | translate }}</h2>
+@if (!upcomingMovies.isLoading()) {
+  <app-horizontal-scroll-list [items]="upcomingMovies.value()"></app-horizontal-scroll-list>
 } @else {
   loading...
 }
 
-<h2>Now playing movies</h2>
-@if (!nowPlayingMoviesResource.isLoading()) {
-  <app-horizontal-scroll-list [items]="nowPlayingMoviesResource.value()"></app-horizontal-scroll-list>
+<h2>{{ 'inTheatres' | translate }}</h2>
+@if (!nowPlayingMovies.isLoading()) {
+  <app-horizontal-scroll-list [items]="nowPlayingMovies.value()"></app-horizontal-scroll-list>
 } @else {
   loading...
 } -->

@@ -1,0 +1,126 @@
+<p>media-details works!</p>
+@let media = mediaDetails.value();
+@let credits = mediaCredits.value();
+@let recommendations = mediaRecommendations.value();
+@let externalIds = mediaExternalIds.value();
+
+@if (mediaDetails.isLoading() || !media) {
+  loading...
+} @else {
+  <div
+    class="banner"
+    [style.backgroundImage]="
+      'url(' + 'https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/' + media.backdrop_path + ')'
+    "
+  >
+    <div class="banner__overlay"></div>
+  </div>
+
+  <div class="info">
+    <div class="info__poster">
+      <img [src]="`https://image.tmdb.org/t/p/w300${media.poster_path}`" />
+    </div>
+
+    <div class="info__panel">
+      <h1 class="info__title">{{ media[config.titleField] }}</h1>
+
+      <div class="info__subheader">
+        <span class="info__subheader__year">{{ media[config.dateField] | date: 'yyyy' }}</span>
+        @if (config.hasRuntime && media.runtime) {
+          &#183;
+          <span class="info__subheader__duration">{{ media.runtime }} min</span>
+        }
+      </div>
+
+      <div class="info__rating">
+        <div class="info__rating__value">
+          <fa-icon [icon]="faStar"></fa-icon>
+          <span> {{ media.vote_average | number: '1.1-1' }}</span>
+        </div>
+        <div class="info__rating__count">({{ media.vote_count }})</div>
+      </div>
+
+      <div class="info__genres">
+        @for (genre of media.genres; track genre) {
+          <div class="info__genres__item">{{ GenreTranslationMap[genre.id] | translate }}</div>
+        }
+      </div>
+
+      <div class="info__overview">
+        {{ media.overview }}
+      </div>
+    </div>
+  </div>
+}
+
+<div class="content">
+  <h2>{{ 'cast' | translate }}</h2>
+  @if (mediaCredits.isLoading() || !credits) {
+    loading...
+  } @else {
+    <app-horizontal-scroll-list
+      [items]="credits.cast"
+      image="profile_path"
+      header="name"
+      subheader="character"
+      route="/person"
+    ></app-horizontal-scroll-list>
+  }
+
+  <h2>{{ 'crew' | translate }}</h2>
+  @if (mediaCredits.isLoading() || !credits) {
+    loading...
+  } @else {
+    <p-table [value]="credits.crew">
+      <ng-template #body let-crew>
+        <tr>
+          <td>{{ `crewJobs.${crew.job}` | translate }}</td>
+          <td>{{ crew.name }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+
+  <h2>{{ 'details' | translate }}</h2>
+  <div class="details">
+    @if (mediaDetails.isLoading() || !media) {
+      loading...
+    } @else {
+      @for (detail of config.customDetails; track detail.labelKey) {
+        <div>
+          <span>{{ detail.labelKey | translate }}</span>
+          <span>
+            @if (media[detail.valueField]) {
+              @if (detail.pipe === 'currency') {
+                {{ media[detail.valueField] | currency: detail.pipeArgs![0] : detail.pipeArgs![1] }}
+              } @else if (detail.pipe === 'date') {
+                {{ media[detail.valueField] | date: 'dd.MM.yyyy' }}
+              } @else {
+                {{ media[detail.valueField] }}
+              }
+            } @else {
+              {{ 'noData' | translate }}
+            }
+          </span>
+        </div>
+      }
+    }
+  </div>
+
+  <h2>{{ 'externalLinks' | translate }}</h2>
+  @if (!mediaExternalIds.isLoading() && !!externalIds) {
+    <app-external-links [ids]="externalIds"></app-external-links>
+  }
+
+  <h2>{{ 'recommendations' | translate }}</h2>
+  @if (mediaRecommendations.isLoading() || !recommendations) {
+    loading...
+  } @else {
+    <app-horizontal-scroll-list
+      [items]="recommendations"
+      image="poster_path"
+      header="title"
+      route="{{ config.route }}"
+    ></app-horizontal-scroll-list>
+  }
+</div>

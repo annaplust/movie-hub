@@ -2,6 +2,7 @@ export interface TvShowDetails {
   adult: boolean;
   backdrop_path: string;
   created_by: CreatedBy[];
+  created_by_names: string;
   episode_run_time: number[];
   first_air_date: string; // ISO date string
   genres: Genre[];
@@ -14,6 +15,7 @@ export interface TvShowDetails {
   name: string;
   next_episode_to_air: Episode | null;
   networks: Network[];
+  networks_names: string;
   number_of_episodes: number;
   number_of_seasons: number;
   origin_country: string[];
@@ -23,7 +25,9 @@ export interface TvShowDetails {
   popularity: number;
   poster_path: string;
   production_companies: ProductionCompany[];
+  production_companies_names: string;
   production_countries: ProductionCountry[];
+  production_countries_names: string;
   seasons: Season[];
   spoken_languages: SpokenLanguage[];
   status: string;
