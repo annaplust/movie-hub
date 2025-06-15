@@ -17,37 +17,39 @@
   </div>
 
   <div class="info">
-    <div class="info__poster">
-      <img [src]="`https://image.tmdb.org/t/p/w300${media.poster_path}`" />
-    </div>
-
-    <div class="info__panel">
-      <h1 class="info__title">{{ media[config.titleField] }}</h1>
-
-      <div class="info__subheader">
-        <span class="info__subheader__year">{{ media[config.dateField] | date: 'yyyy' }}</span>
-        @if (config.hasRuntime && media.runtime) {
-          &#183;
-          <span class="info__subheader__duration">{{ media.runtime }} min</span>
-        }
+    <div class="info__content">
+      <div class="info__poster">
+        <img [src]="`https://image.tmdb.org/t/p/w300${media.poster_path}`" />
       </div>
 
-      <div class="info__rating">
-        <div class="info__rating__value">
-          <fa-icon [icon]="faStar"></fa-icon>
-          <span> {{ media.vote_average | number: '1.1-1' }}</span>
+      <div class="info__panel">
+        <h1 class="info__title">{{ media[config.titleField] }}</h1>
+
+        <div class="info__subheader">
+          <span class="info__subheader__year">{{ media[config.dateField] | date: 'yyyy' }}</span>
+          @if (config.hasRuntime && media.runtime) {
+            &#183;
+            <span class="info__subheader__duration">{{ media.runtime }} min</span>
+          }
         </div>
-        <div class="info__rating__count">({{ media.vote_count }})</div>
-      </div>
 
-      <div class="info__genres">
-        @for (genre of media.genres; track genre) {
-          <div class="info__genres__item">{{ GenreTranslationMap[genre.id] | translate }}</div>
-        }
-      </div>
+        <div class="info__rating">
+          <div class="info__rating__value">
+            <fa-icon [icon]="faStar"></fa-icon>
+            <span> {{ media.vote_average | number: '1.1-1' }}</span>
+          </div>
+          <div class="info__rating__count">({{ media.vote_count }})</div>
+        </div>
 
-      <div class="info__overview">
-        {{ media.overview }}
+        <div class="info__genres">
+          @for (genre of media.genres; track genre) {
+            <div class="info__genres__item">{{ GenreTranslationMap[genre.id] | translate }}</div>
+          }
+        </div>
+
+        <div class="info__overview">
+          {{ media.overview }}
+        </div>
       </div>
     </div>
   </div>
