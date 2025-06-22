@@ -5,24 +5,65 @@
 @if (actorDetailsResource.isLoading() || !actor) {
   loading...
 } @else {
-  <h1>{{ actor.name }}</h1>
-  <img [src]="`https://image.tmdb.org/t/p/w300${actor.profile_path}`" />
+  <div class="info">
+    <div class="info__content">
+      <div class="info__poster">
+        <img [src]="`https://image.tmdb.org/t/p/w300${actor.profile_path}`" />
+      </div>
+
+      <div class="info__panel">
+        <h1 class="info__title">{{ actor.name }}</h1>
+
+        @if (actor.known_for_department) {
+          <div class="info__subheader">
+            @if (actor.birthday) {
+              <span class="info__subheader__age">
+                {{ actor.birthday | date: 'dd.MM.yyyy' }}
+                @if (actor.deathday) {
+                  - {{ actor.deathday | date: 'dd.MM.yyyy' }}
+                }
+                , {{ actor.place_of_birth }}
+              </span>
+            }
+          </div>
+
+          <div class="">
+            @if (actor.biography) {
+              {{ actor.biography }}
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
 }
 
-<h2>Movies</h2>
-@if (movieCreditsResource.isLoading() || !movieCredits) {
-  loading...
-} @else {
-  @for (role of movieCredits; track role.id) {
-    <div>{{ role.title }}: {{ role.character }}</div>
+<div class="content">
+  @if (movieCredits && tvCredits) {
+    <div class="content__area">
+      <h2>{{ 'filmography' | translate }}</h2>
+      <p-table [value]="getCombinedCredits(movieCredits, tvCredits)">
+        <ng-template pTemplate="body" let-credit>
+          <tr>
+            <td>{{ (credit.date | date: 'yyyy') || '-' }}</td>
+            <td>
+              @if (credit.type === 'movie') {
+                <fa-icon [icon]="faClapperboard"></fa-icon>
+              } @else {
+                <fa-icon [icon]="faTv"></fa-icon>
+              }
+            </td>
+            <td>
+              <a [routerLink]="[credit.type === 'movie' ? '/movie' : '/tv', credit.id]">
+                {{ credit.title }}
+              </a>
+              @if (credit.character) {
+                <span>as {{ credit.character }}</span>
+              }
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
   }
-}
-
-<h2>TV Shows</h2>
-@if (tvCreditsResource.isLoading() || !tvCredits) {
-  loading...
-} @else {
-  @for (role of tvCredits; track role.id) {
-    <div>{{ role.name }}: {{ role.character }}</div>
-  }
-}
+</div>

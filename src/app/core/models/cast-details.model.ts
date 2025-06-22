@@ -2,8 +2,8 @@ export interface CastMemberDetails {
   adult: boolean;
   also_known_as: string[];
   biography: string;
-  birthday: string | null; // ISO date string or null
-  deathday: string | null; // ISO date string or null
+  birthday: string | null;
+  deathday: string | null;
   gender: number;
   homepage: string | null;
   id: number;
