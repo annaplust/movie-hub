@@ -280,3 +280,52 @@ h2:not(:first-of-type) {
     animation-delay: 0.4s;
   }
 }
+
+// Filmography table
+tr.year-start:not(:last-child) td,
+tr.same-year:not(:last-child) td {
+  border-bottom: none;
+}
+
+tr.same-year:has(+ tr.year-start) {
+  td {
+    padding-bottom: 24px;
+  }
+}
+
+tr.year-start:not(:first-child) td {
+  border-top: 2px solid var(--p-zinc-500);
+  padding-top: 24px;
+}
+
+tr.same-year td {
+  border-top: none;
+}
+
+tr td:nth-child(3) > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  a {
+    font-weight: 500;
+    width: fit-content;
+  }
+
+  div {
+    display: flex;
+    gap: 4px;
+
+    span {
+      font-size: 0.875rem;
+    }
+
+    span:first-child {
+      color: var(--p-zinc-400);
+    }
+  }
+}
+
+tr td {
+  vertical-align: top;
+}

@@ -92,7 +92,7 @@ export class PeopleService {
   private parsePersonDetails(details: CastMemberDetails): CastMemberDetails {
     return {
       ...details,
-      profile_path: buildProfileImageUrl(details.profile_path),
+      profile_path: buildProfileImageUrl(details.profile_path, POSTER_SIZE),
     };
   }
 

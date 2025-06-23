@@ -7,6 +7,6 @@ export const buildImageUrl = (path: string | null, size: string): string => {
   return path ? `${TMDB_IMAGE_BASE_URL}/${size}${path}` : '';
 };
 
-export const buildProfileImageUrl = (path: string | null): string => {
-  return path ? `${TMDB_MEDIA_BASE_URL}/${PROFILE_SIZE}${path}` : '';
+export const buildProfileImageUrl = (path: string | null, size = PROFILE_SIZE): string => {
+  return path ? `${TMDB_MEDIA_BASE_URL}/${size}${path}` : '';
 };

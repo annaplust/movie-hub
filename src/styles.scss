@@ -14,4 +14,9 @@ body {
 
 a {
   text-decoration: none;
+  color: var(--p-primary-color);
+
+  &:hover {
+    color: var(--p-amber-600);
+  }
 }

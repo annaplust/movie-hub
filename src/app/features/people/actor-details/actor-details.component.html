@@ -43,9 +43,14 @@
     <div class="content__area">
       <h2>{{ 'filmography' | translate }}</h2>
       <p-table [value]="getCombinedCredits(movieCredits, tvCredits)">
-        <ng-template pTemplate="body" let-credit>
-          <tr>
-            <td>{{ (credit.date | date: 'yyyy') || '-' }}</td>
+        <ng-template pTemplate="body" let-credit let-i="rowIndex">
+          @let combinedCredits = getCombinedCredits(movieCredits, tvCredits);
+          @let currentYear = (credit.date | date: 'yyyy') || '-';
+          @let previousYear = i > 0 ? (combinedCredits[i - 1].date | date: 'yyyy') || '-' : null;
+          @let isYearStart = i === 0 || currentYear !== previousYear;
+
+          <tr [class.year-start]="isYearStart" [class.same-year]="!isYearStart">
+            <td>{{ currentYear }}</td>
             <td>
               @if (credit.type === 'movie') {
                 <fa-icon [icon]="faClapperboard"></fa-icon>
@@ -54,12 +59,16 @@
               }
             </td>
             <td>
-              <a [routerLink]="[credit.type === 'movie' ? '/movie' : '/tv', credit.id]">
-                {{ credit.title }}
-              </a>
-              @if (credit.character) {
-                <span>as {{ credit.character }}</span>
-              }
+              <div>
+                <a [routerLink]="[credit.type === 'movie' ? '/movie' : '/tv', credit.id]">
+                  {{ credit.title }}
+                </a>
+                @if (credit.character) {
+                  <div>
+                    <span>as</span> <span>{{ credit.character }}</span>
+                  </div>
+                }
+              </div>
             </td>
           </tr>
         </ng-template>

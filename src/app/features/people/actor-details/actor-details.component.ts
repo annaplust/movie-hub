@@ -180,28 +180,4 @@ export class ActorDetailsComponent implements OnInit {
 
     return Array.from(departments);
   }
-
-  /**
-   * Optional: Calculate career span
-   */
-  getCareerSpan(movieCredits: any[], tvCredits: any[]): { start: number | null; end: number | null; years: number } {
-    const allCredits = this.getCombinedCredits(movieCredits, tvCredits);
-    const years = allCredits
-      .map((credit) => credit.year)
-      .filter((year) => year !== null)
-      .sort((a, b) => a - b);
-
-    if (years.length === 0) {
-      return { start: null, end: null, years: 0 };
-    }
-
-    const start = years[0];
-    const end = years[years.length - 1];
-
-    return {
-      start,
-      end,
-      years: end - start + 1,
-    };
-  }
 }
