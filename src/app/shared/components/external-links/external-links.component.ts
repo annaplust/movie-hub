@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { ExternalIds } from '@core/models/external-ids.model';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faImdb } from '@fortawesome/free-brands-svg-icons';
+import { faImdb, faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
   selector: 'app-external-links',
@@ -14,4 +14,6 @@ export class ExternalLinksComponent {
 
   // Icons
   faImdb = faImdb;
+  faInstagram = faInstagram;
+  faXTwitter = faXTwitter;
 }

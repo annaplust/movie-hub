@@ -20,3 +20,32 @@ a {
     color: var(--p-amber-600);
   }
 }
+
+.main-content {
+  max-width: 1000px;
+  margin: auto;
+  padding: 16px;
+
+  .content-section {
+    margin-top: 32px;
+    padding: 24px;
+
+    .section-title {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-weight: 700;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background: var(--p-amber-500);
+        border-radius: 2px;
+      }
+    }
+  }
+}

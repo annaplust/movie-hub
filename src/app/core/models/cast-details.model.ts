@@ -2,7 +2,7 @@ export interface CastMemberDetails {
   adult: boolean;
   also_known_as: string[];
   biography: string;
-  birthday: string | null;
+  birthday: string;
   deathday: string | null;
   gender: number;
   homepage: string | null;

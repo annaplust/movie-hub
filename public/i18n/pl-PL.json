@@ -14,7 +14,12 @@
   "productionCompanies": "Studia produkcyjne",
   "productionCountries": "Kraje produkcji",
   "noData": "Brak danych",
+  "dateOfBirth": "Data urodzenia",
+  "dateOfDeath": "Data śmierci",
+  "placeOfBirth": "Miejsce urodzenia",
+  "gender": "Płeć",
   "filmography": "Fimlografia",
+  "knownFor": "Znany z",
   "crewJobs": {
     "novel": "Powieść",
     "director": "Reżyser",

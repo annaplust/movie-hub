@@ -1,10 +1,12 @@
-import { CommonModule, DatePipe, SlicePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActorMovieCredit, ActorTvShowCredit } from '@core/models/actor-credits.model';
 import { PeopleService } from '@core/services/people.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faClapperboard, faStar, faTv } from '@fortawesome/free-solid-svg-icons';
 import { TranslateModule } from '@ngx-translate/core';
+import { ExternalLinksComponent } from '@shared/components/external-links/external-links.component';
 import { HorizontalScrollListComponent } from '@shared/components/horizontal-scroll-list/horizontal-scroll-list.component';
 import { TableModule } from 'primeng/table';
 
@@ -16,9 +18,9 @@ import { TableModule } from 'primeng/table';
     TableModule,
     HorizontalScrollListComponent,
     DatePipe,
-    SlicePipe,
     FontAwesomeModule,
     CommonModule,
+    ExternalLinksComponent,
   ],
   templateUrl: './actor-details.component.html',
   styleUrl: './actor-details.component.scss',
@@ -31,6 +33,7 @@ export class ActorDetailsComponent implements OnInit {
   actorDetailsResource = this.peopleService.personDetails;
   movieCreditsResource = this.peopleService.personMovieCredits;
   tvCreditsResource = this.peopleService.personTvCredits;
+  personExternalIds = this.peopleService.personExternalIds;
 
   // Icons
   faStar = faStar;
@@ -44,26 +47,9 @@ export class ActorDetailsComponent implements OnInit {
   }
 
   /**
-   * Convert gender number to readable text
-   * TMDB API uses: 0 = Not specified, 1 = Female, 2 = Male, 3 = Non-binary
-   */
-  getGenderText(gender: number): string {
-    switch (gender) {
-      case 1:
-        return 'female';
-      case 2:
-        return 'male';
-      case 3:
-        return 'nonBinary';
-      default:
-        return 'notSpecified';
-    }
-  }
-
-  /**
    * Combine movie and TV credits into a single sorted array
    */
-  getCombinedCredits(movieCredits: any[], tvCredits: any[]): any[] {
+  getCombinedCredits(movieCredits: ActorMovieCredit[], tvCredits: ActorTvShowCredit[]): any[] {
     const combined: any[] = [];
 
     // Add movie credits
@@ -77,6 +63,9 @@ export class ActorDetailsComponent implements OnInit {
           type: 'movie',
           release_date: movie.release_date,
           poster_path: movie.poster_path,
+          popularity: movie.popularity,
+          vote_average: movie.vote_average,
+          vote_count: movie.vote_count,
         });
       });
     }
@@ -92,6 +81,9 @@ export class ActorDetailsComponent implements OnInit {
           type: 'tv',
           release_date: tv.first_air_date,
           poster_path: tv.poster_path,
+          popularity: tv.popularity,
+          vote_average: tv.vote_average,
+          vote_count: tv.vote_count,
         });
       });
     }
@@ -103,9 +95,9 @@ export class ActorDetailsComponent implements OnInit {
           return b.date - a.date; // Descending order
         }
       } else if (a.date && !b.date) {
-        return -1;
-      } else if (!a.date && b.date) {
         return 1;
+      } else if (!a.date && b.date) {
+        return -1;
       }
 
       // If years are equal or both null, sort by title
@@ -114,16 +106,63 @@ export class ActorDetailsComponent implements OnInit {
   }
 
   /**
+   * Calculate age based on birthday and optional deathday
+   */
+  calculateAge(birthday: string, deathday: string | null): number {
+    const birthDate = new Date(birthday);
+    const endDate = deathday ? new Date(deathday) : new Date();
+
+    let age = endDate.getFullYear() - birthDate.getFullYear();
+    const monthDiff = endDate.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && endDate.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
+  }
+
+  /**
    * Optional: Get actor's most famous works (top rated/popular)
    */
-  getMostFamousWorks(movieCredits: any[], tvCredits: any[], limit: number = 5): any[] {
+  getMostFamousWorks(movieCredits: ActorMovieCredit[], tvCredits: ActorTvShowCredit[], limit: number = 5): any[] {
     const allCredits = this.getCombinedCredits(movieCredits, tvCredits);
 
-    // Sort by popularity/vote_average if available
-    return allCredits
-      .filter((credit) => credit.vote_average && credit.vote_average > 0)
-      .sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0))
-      .slice(0, limit);
+    // Filter out credits without vote_average or vote_count
+    const validCredits = allCredits.filter((credit) => credit.vote_average > 0 && credit.vote_count > 0);
+
+    if (validCredits.length === 0) return [];
+
+    // Compute min and max for normalization
+    const voteCountValues = validCredits.map((c) => c.vote_count);
+    const popularityValues = validCredits.map((c) => c.popularity);
+    const orderValues = validCredits.map((c) => (typeof c.order === 'number' ? c.order : 0));
+
+    const minVoteCount = Math.min(...voteCountValues);
+    const maxVoteCount = Math.max(...voteCountValues);
+    const minPopularity = Math.min(...popularityValues);
+    const maxPopularity = Math.max(...popularityValues);
+    const maxOrder = Math.max(...orderValues);
+
+    // Helper to normalize between 0 and 1
+    const normalize = (value: number, min: number, max: number) => {
+      if (max === min) return 0.5; // avoid division by zero, neutral score
+      return (value - min) / (max - min);
+    };
+
+    // Calculate combined score for each credit
+    validCredits.forEach((credit) => {
+      const voteCountNorm = normalize(credit.vote_count, minVoteCount, maxVoteCount);
+      const voteAverageNorm = credit.vote_average / 10; // TMDb ratings are 0-10
+      const popularityNorm = normalize(credit.popularity, minPopularity, maxPopularity);
+      const billingOrderNorm = maxOrder > 0 ? 1 - credit.order / maxOrder : 0.5;
+
+      credit._knownForScore =
+        voteCountNorm * 0.4 + voteAverageNorm * 0.3 + popularityNorm * 0.2 + billingOrderNorm * 0.1;
+    });
+
+    // Sort by combined score descending and return top results
+    return validCredits.sort((a, b) => b._knownForScore - a._knownForScore).slice(0, limit);
   }
 
   /**

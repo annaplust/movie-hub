@@ -1,36 +1,36 @@
 @let actor = actorDetailsResource.value();
 @let movieCredits = movieCreditsResource.value();
 @let tvCredits = tvCreditsResource.value();
+@let externalIds = personExternalIds.value();
 
 @if (actorDetailsResource.isLoading() || !actor) {
-  loading...
+  <div class="loading-container">
+    <div class="loading-spinner"></div>
+    <span class="loading-text">Loading actor details...</span>
+  </div>
 } @else {
-  <div class="info">
-    <div class="info__content">
-      <div class="info__poster">
-        <img [src]="`https://image.tmdb.org/t/p/w300${actor.profile_path}`" />
+  <div class="actor-hero">
+    <div class="actor-hero__container">
+      <div class="actor-hero__image">
+        <img
+          [src]="`https://image.tmdb.org/t/p/w300${actor.profile_path}`"
+          [alt]="actor.name"
+          class="actor-hero__portrait"
+        />
       </div>
 
-      <div class="info__panel">
-        <h1 class="info__title">{{ actor.name }}</h1>
+      <div class="actor-hero__details">
+        <h1 class="actor-hero__name">{{ actor.name }}</h1>
 
         @if (actor.known_for_department) {
-          <div class="info__subheader">
-            @if (actor.birthday) {
-              <span class="info__subheader__age">
-                {{ actor.birthday | date: 'dd.MM.yyyy' }}
-                @if (actor.deathday) {
-                  - {{ actor.deathday | date: 'dd.MM.yyyy' }}
-                }
-                , {{ actor.place_of_birth }}
-              </span>
-            }
+          <div class="actor-hero__profession">
+            {{ actor.known_for_department }}
           </div>
+        }
 
-          <div class="">
-            @if (actor.biography) {
-              {{ actor.biography }}
-            }
+        @if (actor.biography) {
+          <div class="actor-hero__bio">
+            {{ actor.biography }}
           </div>
         }
       </div>
@@ -38,41 +38,99 @@
   </div>
 }
 
-<div class="content">
-  @if (movieCredits && tvCredits) {
-    <div class="content__area">
-      <h2>{{ 'filmography' | translate }}</h2>
-      <p-table [value]="getCombinedCredits(movieCredits, tvCredits)">
-        <ng-template pTemplate="body" let-credit let-i="rowIndex">
-          @let combinedCredits = getCombinedCredits(movieCredits, tvCredits);
-          @let currentYear = (credit.date | date: 'yyyy') || '-';
-          @let previousYear = i > 0 ? (combinedCredits[i - 1].date | date: 'yyyy') || '-' : null;
-          @let isYearStart = i === 0 || currentYear !== previousYear;
-
-          <tr [class.year-start]="isYearStart" [class.same-year]="!isYearStart">
-            <td>{{ currentYear }}</td>
-            <td>
-              @if (credit.type === 'movie') {
-                <fa-icon [icon]="faClapperboard"></fa-icon>
-              } @else {
-                <fa-icon [icon]="faTv"></fa-icon>
-              }
-            </td>
-            <td>
-              <div>
-                <a [routerLink]="[credit.type === 'movie' ? '/movie' : '/tv', credit.id]">
-                  {{ credit.title }}
-                </a>
-                @if (credit.character) {
-                  <div>
-                    <span>as</span> <span>{{ credit.character }}</span>
-                  </div>
-                }
-              </div>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
+<div class="main-content">
+  <section class="content-section">
+    <h2 class="section-title">{{ 'knownFor' | translate }}</h2>
+    <div class="known-for-container">
+      <app-horizontal-scroll-list
+        [items]="getMostFamousWorks(movieCredits, tvCredits, 10)"
+        image="poster_path"
+        header="title"
+        route="/movie"
+      ></app-horizontal-scroll-list>
     </div>
+  </section>
+
+  <section class="content-section">
+    <h2 class="section-title">{{ 'details' | translate }}</h2>
+
+    <div class="personal-details">
+      @if (actor) {
+        <div class="detail-item">
+          <span class="detail-label">{{ 'dateOfBirth' | translate }}</span>
+          <span class="detail-value">
+            {{ actor.birthday | date: 'dd.MM.yyyy' }}
+            ({{ calculateAge(actor.birthday, actor.deathday) }})
+          </span>
+        </div>
+
+        @if (actor.deathday) {
+          <div class="detail-item">
+            <span class="detail-label">{{ 'dateOfDeath' | translate }}</span>
+            <span class="detail-value">{{ actor.deathday | date: 'dd.MM.yyyy' }}</span>
+          </div>
+        }
+
+        @if (actor.place_of_birth) {
+          <div class="detail-item">
+            <span class="detail-label">{{ 'placeOfBirth' | translate }}</span>
+            <span class="detail-value">{{ actor.place_of_birth }}</span>
+          </div>
+        }
+      }
+    </div>
+  </section>
+
+  @if (movieCredits && tvCredits) {
+    <section class="content-section">
+      <h2 class="section-title">{{ 'filmography' | translate }}</h2>
+      <div class="filmography-table">
+        <p-table [value]="getCombinedCredits(movieCredits, tvCredits)" class="credits-table">
+          <ng-template pTemplate="body" let-credit let-i="rowIndex">
+            @let combinedCredits = getCombinedCredits(movieCredits, tvCredits);
+            @let currentYear = (credit.date | date: 'yyyy') || '-';
+            @let previousYear = i > 0 ? (combinedCredits[i - 1].date | date: 'yyyy') || '-' : null;
+            @let isYearStart = i === 0 || currentYear !== previousYear;
+
+            <tr
+              [class.filmography-year-start]="isYearStart"
+              [class.filmography-same-year]="!isYearStart"
+              class="filmography-row"
+            >
+              <td class="filmography-year">{{ currentYear }}</td>
+              <td class="filmography-type">
+                @if (credit.type === 'movie') {
+                  <fa-icon [icon]="faClapperboard" class="media-icon"></fa-icon>
+                } @else {
+                  <fa-icon [icon]="faTv" class="media-icon"></fa-icon>
+                }
+              </td>
+              <td class="filmography-title">
+                <div class="title-container">
+                  <a [routerLink]="[credit.type === 'movie' ? '/movie' : '/tv', credit.id]" class="title-link">
+                    {{ credit.title }}
+                  </a>
+                  @if (credit.character) {
+                    <div class="character-info">
+                      <span class="character-as">as</span>
+                      <span class="character-name">{{ credit.character }}</span>
+                    </div>
+                  }
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </section>
   }
+
+  <section class="content-section">
+    <h2 class="section-title">{{ 'externalLinks' | translate }}</h2>
+    @if (externalIds) {
+      <div class="external-links-container">
+        <app-external-links [ids]="externalIds"></app-external-links>
+      </div>
+    }
+  </section>
 </div>

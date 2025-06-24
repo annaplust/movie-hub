@@ -19,7 +19,12 @@
   "firstAirDate": "First air date",
   "lastAirDate": "Last air date",
   "noData": "No data",
+  "dateOfBirth": "Date of birth",
+  "dateOfDeath": "Date of death",
+  "placeOfBirth": "Place of birth",
+  "gender": "Gender",
   "filmography": "Filmography",
+  "knownFor": "Known for",
   "crewJobs": {
     "novel": "Novel",
     "director": "Director",

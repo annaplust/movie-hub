@@ -1,6 +1,6 @@
 import { httpResource } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { ActorCredit, ActorCredits } from '@core/models/actor-credits.model';
+import { ActorCredits, ActorMovieCredit, ActorTvShowCredit } from '@core/models/actor-credits.model';
 import { CastMemberDetails } from '@core/models/cast-details.model';
 import { Movie } from '@core/models/movie.model';
 import { Person } from '@core/models/person.model';
@@ -9,6 +9,7 @@ import { environment } from '@environments/environment';
 import { ScrollItem } from '@shared/components/horizontal-scroll-list/scroll-item.model';
 import { buildImageUrl, buildProfileImageUrl } from '@utils/image-url';
 import { LanguageService } from './language.service';
+import { ExternalIds } from '@core/models/external-ids.model';
 
 // Constants for better maintainability
 const POSTER_SIZE = 'w300';
@@ -53,27 +54,32 @@ export class PeopleService {
     },
   );
 
-  readonly personMovieCredits = httpResource<ActorCredit[]>(
+  readonly personMovieCredits = httpResource<ActorMovieCredit[]>(
     () => {
       const endpoint = this.personEndpoint();
       return endpoint ? `${endpoint}/movie_credits?language=${this.currentLanguage()}` : undefined;
     },
     {
       defaultValue: [],
-      parse: (data) => this.parseCredits(data as ActorCredits),
+      parse: (data) => this.parseMovieCredits(data as ActorCredits<ActorMovieCredit>),
     },
   );
 
-  readonly personTvCredits = httpResource<ActorCredit[]>(
+  readonly personTvCredits = httpResource<ActorTvShowCredit[]>(
     () => {
       const endpoint = this.personEndpoint();
       return endpoint ? `${endpoint}/tv_credits?language=${this.currentLanguage()}` : undefined;
     },
     {
       defaultValue: [],
-      parse: (data) => this.parseCredits(data as ActorCredits),
+      parse: (data) => this.parseTvShowCredits(data as ActorCredits<ActorTvShowCredit>),
     },
   );
+
+  readonly personExternalIds = httpResource<ExternalIds | undefined>(() => {
+    const endpoint = this.personEndpoint();
+    return endpoint ? `${endpoint}/external_ids` : undefined;
+  });
 
   // Public methods
   setSelectedPersonId(id: number | null): void {
@@ -96,7 +102,16 @@ export class PeopleService {
     };
   }
 
-  private parseCredits(credits: ActorCredits): ActorCredit[] {
+  private parseMovieCredits(credits: ActorCredits<ActorMovieCredit>): ActorMovieCredit[] {
+    return (
+      credits.cast?.map((credit) => ({
+        ...credit,
+        poster_path: buildImageUrl(credit.poster_path, POSTER_SIZE),
+      })) ?? []
+    );
+  }
+
+  private parseTvShowCredits<T>(credits: ActorCredits<ActorTvShowCredit>): ActorTvShowCredit[] {
     return (
       credits.cast?.map((credit) => ({
         ...credit,

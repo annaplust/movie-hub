@@ -2,19 +2,55 @@ h2:not(:first-of-type) {
   margin-top: 48px;
 }
 
-.info {
+// Loading state
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  min-height: 300px;
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--p-gray-300);
+    border-top: 3px solid var(--p-amber-500);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+  }
+
+  .loading-text {
+    color: var(--p-gray-600);
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Actor hero section
+.actor-hero {
   width: 100%;
   display: flex;
   padding: 20px;
 
-  &__content {
+  &__container {
     display: flex;
     flex-direction: column;
     gap: 12px;
     align-items: center;
   }
 
-  &__panel {
+  &__details {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -22,8 +58,8 @@ h2:not(:first-of-type) {
     height: 100%;
   }
 
-  &__poster {
-    img {
+  &__image {
+    .actor-hero__portrait {
       width: 200px;
       height: auto;
       border-radius: 16px;
@@ -38,7 +74,7 @@ h2:not(:first-of-type) {
     }
   }
 
-  &__title {
+  &__name {
     margin: 0;
     margin-bottom: 8px;
     text-align: center;
@@ -46,122 +82,150 @@ h2:not(:first-of-type) {
     letter-spacing: -0.5px;
   }
 
-  &__subheader {
+  &__profession {
     margin-bottom: 16px;
     text-align: center;
     opacity: 0.9;
     font-weight: 500;
-
-    &__age {
-      color: rgba(255, 255, 255, 0.8);
-    }
   }
 
-  &__overview {
+  &__bio {
     margin-bottom: 16px;
     line-height: 1.6;
-    text-align: center;
-    max-width: 600px;
     opacity: 0.95;
-
-    &--biography {
-      font-style: italic;
-      position: relative;
-
-      &::before {
-        content: '"';
-        font-size: 2em;
-        position: absolute;
-        left: -20px;
-        top: -10px;
-        font-family: Georgia, serif;
-      }
-
-      &::after {
-        content: '"';
-        font-size: 2em;
-        position: absolute;
-        right: -20px;
-        bottom: -20px;
-        font-family: Georgia, serif;
-      }
-    }
+    position: relative;
   }
 }
 
-.details {
-  margin-bottom: 32px;
-
-  div {
+// Personal details section
+.personal-details {
+  .detail-item {
     display: grid;
     grid-template-columns: minmax(12rem, auto) 1fr;
     margin-bottom: 12px;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 
-    &:last-child {
-      border-bottom: none;
-    }
-
-    strong {
+    .detail-label {
       font-weight: 600;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    span {
-      line-height: 1.5;
+    .detail-value {
+      display: flex;
+      align-items: center;
     }
   }
 }
 
-.content {
-  max-width: 1000px;
-  margin: auto;
-  padding: 16px;
-
-  &__area {
-    margin-top: 32px;
-    padding: 24px;
-
-    &--filmography {
-      h2 {
+// Main content layout
+.main-content {
+  .content-section {
+    &.filmography-section {
+      .section-title {
         margin-bottom: 24px;
       }
     }
-
-    h2 {
-      margin-top: 0;
-      margin-bottom: 20px;
-      font-weight: 700;
-      position: relative;
-
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 0;
-        width: 40px;
-        height: 3px;
-        background: var(--p-amber-500);
-        border-radius: 2px;
-      }
-    }
   }
 }
 
-.p-datatable {
-  .p-datatable-header {
-    background: var(--p-gray-50);
-    border-bottom: 2px solid var(--p-amber-500);
+// Known for section
+.known-for-container {
+  // Styles for the horizontal scroll component container
+}
+
+// External links section
+.external-links-container {
+  // Styles for external links component container
+}
+
+// Filmography table
+.filmography-table {
+  .credits-table {
+    .p-datatable-header {
+      background: var(--p-gray-50);
+      border-bottom: 2px solid var(--p-amber-500);
+    }
+
+    .p-datatable-tbody tr {
+      td {
+        a {
+          text-decoration: none;
+          font-weight: 500;
+        }
+      }
+    }
   }
 
-  .p-datatable-tbody tr {
+  .filmography-row {
+    &:first-of-type td {
+      padding-top: 20px;
+    }
+
+    &:last-of-type td {
+      padding-bottom: 20px;
+    }
+
+    &.filmography-year-start:not(:last-child) td,
+    &.filmography-same-year:not(:last-child) td {
+      border-bottom: none;
+    }
+
+    &.filmography-year-start:has(+ .filmography-year-start) td {
+      padding-bottom: 20px;
+    }
+
+    &.filmography-same-year:has(+ .filmography-year-start) td {
+      padding-bottom: 20px;
+    }
+
+    &.filmography-year-start:not(:first-child) td {
+      border-top: 2px solid var(--p-zinc-500);
+      padding-top: 20px;
+    }
+
+    &.filmography-same-year td {
+      border-top: none;
+    }
+
     td {
-      a {
-        text-decoration: none;
-        font-weight: 500;
+      vertical-align: top;
+    }
+
+    .filmography-year {
+      // Year column styles
+    }
+
+    .filmography-type {
+      .media-icon {
+        // Icon styles for movie/tv indicators
+      }
+    }
+
+    .filmography-title {
+      .title-container {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        .title-link {
+          font-weight: 500;
+          width: fit-content;
+        }
+
+        .character-info {
+          display: flex;
+          gap: 4px;
+
+          .character-as,
+          .character-name {
+            font-size: 0.875rem;
+          }
+
+          .character-as {
+            color: var(--p-zinc-400);
+          }
+        }
       }
     }
   }
@@ -184,22 +248,23 @@ h2:not(:first-of-type) {
   }
 }
 
+// Responsive design
 @media (min-width: 1400px) {
-  .info {
+  .actor-hero {
     justify-content: center;
-  }
 
-  .info__content {
-    max-width: 1276px;
-    left: calc(-1400px / 2 + 100vw / 2);
+    &__container {
+      max-width: 1276px;
+      left: calc(-1400px / 2 + 100vw / 2);
+    }
   }
 }
 
 @media (min-width: 769px) {
-  .content {
+  .main-content {
     padding: 32px;
 
-    &__area {
+    .content-section {
       padding: 40px;
       margin-top: 0px;
 
@@ -209,18 +274,18 @@ h2:not(:first-of-type) {
     }
   }
 
-  .info {
+  .actor-hero {
     padding: 48px 64px;
     margin-top: 0;
 
-    &__content {
+    &__container {
       display: flex;
       flex-direction: row;
       align-items: flex-start;
       gap: 40px;
     }
 
-    &__panel {
+    &__details {
       padding-top: 32px;
       display: flex;
       flex-direction: column;
@@ -230,20 +295,20 @@ h2:not(:first-of-type) {
       flex: 1;
     }
 
-    &__poster img {
+    &__image .actor-hero__portrait {
       width: 300px;
       height: auto;
       border-radius: 16px;
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
     }
 
-    &__title {
+    &__name {
       text-align: left;
       margin-bottom: 12px;
       font-size: clamp(28px, 4vw, 42px);
     }
 
-    &__subheader {
+    &__profession {
       margin-bottom: 20px;
       text-align: left;
       font-size: 18px;
@@ -251,7 +316,7 @@ h2:not(:first-of-type) {
   }
 }
 
-// Actor-specific: Animation for loading states
+// Animation for loading states
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -263,7 +328,7 @@ h2:not(:first-of-type) {
   }
 }
 
-.content__area {
+.content-section {
   animation: fadeInUp 0.6s ease-out;
   animation-fill-mode: both;
 
@@ -279,53 +344,4 @@ h2:not(:first-of-type) {
   &:nth-child(4) {
     animation-delay: 0.4s;
   }
-}
-
-// Filmography table
-tr.year-start:not(:last-child) td,
-tr.same-year:not(:last-child) td {
-  border-bottom: none;
-}
-
-tr.same-year:has(+ tr.year-start) {
-  td {
-    padding-bottom: 24px;
-  }
-}
-
-tr.year-start:not(:first-child) td {
-  border-top: 2px solid var(--p-zinc-500);
-  padding-top: 24px;
-}
-
-tr.same-year td {
-  border-top: none;
-}
-
-tr td:nth-child(3) > div {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-
-  a {
-    font-weight: 500;
-    width: fit-content;
-  }
-
-  div {
-    display: flex;
-    gap: 4px;
-
-    span {
-      font-size: 0.875rem;
-    }
-
-    span:first-child {
-      color: var(--p-zinc-400);
-    }
-  }
-}
-
-tr td {
-  vertical-align: top;
 }
