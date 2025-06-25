@@ -10,6 +10,7 @@ import { TableModule } from 'primeng/table';
 import { ExternalLinksComponent } from '../external-links/external-links.component';
 import { HorizontalScrollListComponent } from '../horizontal-scroll-list/horizontal-scroll-list.component';
 import { MediaType } from '@core/models/media-type.model';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-media-details',
@@ -22,6 +23,7 @@ import { MediaType } from '@core/models/media-type.model';
     DatePipe,
     FontAwesomeModule,
     CurrencyPipe,
+    SkeletonModule,
   ],
   templateUrl: './media-details.component.html',
   styleUrl: './media-details.component.scss',

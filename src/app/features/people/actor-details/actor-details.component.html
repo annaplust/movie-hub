@@ -3,40 +3,44 @@
 @let tvCredits = tvCreditsResource.value();
 @let externalIds = personExternalIds.value();
 
-@if (actorDetailsResource.isLoading() || !actor) {
-  <div class="loading-container">
-    <div class="loading-spinner"></div>
-    <span class="loading-text">Loading actor details...</span>
-  </div>
-} @else {
-  <div class="actor-hero">
-    <div class="actor-hero__container">
-      <div class="actor-hero__image">
-        <img
-          [src]="`https://image.tmdb.org/t/p/w300${actor.profile_path}`"
-          [alt]="actor.name"
-          class="actor-hero__portrait"
-        />
-      </div>
+<div class="hero">
+  <div class="hero__container">
+    @if (!actorDetailsResource.isLoading() && actor) {
+      <img [src]="actor.profile_path" [alt]="actor.name" class="hero__portrait" />
+    } @else {
+      <p-skeleton width="300px" height="450px" />
+    }
 
-      <div class="actor-hero__details">
-        <h1 class="actor-hero__name">{{ actor.name }}</h1>
+    <div class="hero__details">
+      @if (!actorDetailsResource.isLoading() && actor) {
+        <h1 class="hero__name">{{ actor.name }}</h1>
 
         @if (actor.known_for_department) {
-          <div class="actor-hero__profession">
+          <div class="hero__profession">
             {{ actor.known_for_department }}
           </div>
         }
 
         @if (actor.biography) {
-          <div class="actor-hero__bio">
+          <div class="hero__bio">
             {{ actor.biography }}
           </div>
         }
-      </div>
+      } @else {
+        <p-skeleton height="50px" width="350px" class="hero__name" />
+        <p-skeleton height="22px" width="160px" class="hero__profession" />
+        <div class="hero__bio">
+          <p-skeleton height="25px" width="80%" />
+          <p-skeleton height="25px" width="100%" />
+          <p-skeleton height="25px" width="70%" />
+          <p-skeleton height="25px" width="50%" />
+          <p-skeleton height="25px" width="90%" />
+          <p-skeleton height="25px" width="50%" />
+        </div>
+      }
     </div>
   </div>
-}
+</div>
 
 <div class="main-content">
   <section class="content-section">
@@ -44,9 +48,9 @@
     <div class="known-for-container">
       <app-horizontal-scroll-list
         [items]="getMostFamousWorks(movieCredits, tvCredits, 10)"
+        [loading]="movieCreditsResource.isLoading() || tvCreditsResource.isLoading()"
         image="poster_path"
         header="title"
-        route="/movie"
       ></app-horizontal-scroll-list>
     </div>
   </section>

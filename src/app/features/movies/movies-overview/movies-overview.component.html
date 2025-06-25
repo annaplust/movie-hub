@@ -1,26 +1,16 @@
 <h2>{{ 'trendingToday' | translate }}</h2>
-@if (!trendingDayMovies.isLoading()) {
-  <app-horizontal-scroll-list
-    [items]="trendingDayMovies.value()"
-    image="poster_path"
-    header="title"
-    route="/movie"
-    size="lg"
-  ></app-horizontal-scroll-list>
-} @else {
-  loading...
-}
+<app-horizontal-scroll-list
+  [items]="trendingDayMovies.value()"
+  [loading]="trendingDayMovies.isLoading()"
+  image="poster_path"
+  header="title"
+  size="md"
+></app-horizontal-scroll-list>
 
 <!-- <h2>{{ 'comingSoon' | translate }}</h2>
-@if (!upcomingMovies.isLoading()) {
-  <app-horizontal-scroll-list [items]="upcomingMovies.value()"></app-horizontal-scroll-list>
-} @else {
-  loading...
-}
+  <app-horizontal-scroll-list [items]="upcomingMovies.value()" [loading]="upcomingMovies.isLoading()"></app-horizontal-scroll-list>
+
 
 <h2>{{ 'inTheatres' | translate }}</h2>
-@if (!nowPlayingMovies.isLoading()) {
-  <app-horizontal-scroll-list [items]="nowPlayingMovies.value()"></app-horizontal-scroll-list>
-} @else {
-  loading...
-} -->
+  <app-horizontal-scroll-list [items]="nowPlayingMovies.value()" [loading]="nowPlayingMovies.isLoading()"></app-horizontal-scroll-list>
+ -->

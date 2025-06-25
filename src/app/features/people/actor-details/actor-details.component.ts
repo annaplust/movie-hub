@@ -8,6 +8,7 @@ import { faClapperboard, faStar, faTv } from '@fortawesome/free-solid-svg-icons'
 import { TranslateModule } from '@ngx-translate/core';
 import { ExternalLinksComponent } from '@shared/components/external-links/external-links.component';
 import { HorizontalScrollListComponent } from '@shared/components/horizontal-scroll-list/horizontal-scroll-list.component';
+import { SkeletonModule } from 'primeng/skeleton';
 import { TableModule } from 'primeng/table';
 
 @Component({
@@ -21,6 +22,7 @@ import { TableModule } from 'primeng/table';
     FontAwesomeModule,
     CommonModule,
     ExternalLinksComponent,
+    SkeletonModule,
   ],
   templateUrl: './actor-details.component.html',
   styleUrl: './actor-details.component.scss',
@@ -66,6 +68,7 @@ export class ActorDetailsComponent implements OnInit {
           popularity: movie.popularity,
           vote_average: movie.vote_average,
           vote_count: movie.vote_count,
+          media_type: movie.media_type,
         });
       });
     }
@@ -84,6 +87,7 @@ export class ActorDetailsComponent implements OnInit {
           popularity: tv.popularity,
           vote_average: tv.vote_average,
           vote_count: tv.vote_count,
+          media_type: tv.media_type,
         });
       });
     }

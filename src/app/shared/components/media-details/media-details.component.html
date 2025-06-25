@@ -4,7 +4,7 @@
 @let externalIds = mediaExternalIds.value();
 
 @if (mediaDetails.isLoading() || !media) {
-  loading...
+  <p-skeleton width="100%" height="600px" />
 } @else {
   <div
     class="banner"
@@ -56,21 +56,18 @@
 
 <div class="content">
   <h2>{{ 'cast' | translate }}</h2>
-  @if (mediaCredits.isLoading() || !credits) {
-    loading...
-  } @else {
-    <app-horizontal-scroll-list
-      [items]="credits.cast"
-      image="profile_path"
-      header="name"
-      subheader="character"
-      route="/person"
-    ></app-horizontal-scroll-list>
-  }
+  <app-horizontal-scroll-list
+    [items]="credits?.cast"
+    [loading]="mediaCredits.isLoading()"
+    image="profile_path"
+    header="name"
+    subheader="character"
+    route="person"
+  ></app-horizontal-scroll-list>
 
   <h2>{{ 'crew' | translate }}</h2>
   @if (mediaCredits.isLoading() || !credits) {
-    loading...
+    <p-skeleton width="100%" height="400px" />
   } @else {
     <p-table [value]="credits.crew">
       <ng-template #body let-crew>
@@ -84,12 +81,10 @@
 
   <h2>{{ 'details' | translate }}</h2>
   <div class="details">
-    @if (mediaDetails.isLoading() || !media) {
-      loading...
-    } @else {
-      @for (detail of config.customDetails; track detail.labelKey) {
-        <div>
-          <span>{{ detail.labelKey | translate }}</span>
+    @for (detail of config.customDetails; track detail.labelKey) {
+      <div>
+        <span>{{ detail.labelKey | translate }}</span>
+        @if (!mediaDetails.isLoading() && media) {
           <span>
             @if (media[detail.valueField]) {
               @if (detail.pipe === 'currency') {
@@ -103,8 +98,10 @@
               {{ 'noData' | translate }}
             }
           </span>
-        </div>
-      }
+        } @else {
+          <p-skeleton width="70%" height="22px" />
+        }
+      </div>
     }
   </div>
 
@@ -114,14 +111,10 @@
   }
 
   <h2>{{ 'recommendations' | translate }}</h2>
-  @if (mediaRecommendations.isLoading() || !recommendations) {
-    loading...
-  } @else {
-    <app-horizontal-scroll-list
-      [items]="recommendations"
-      image="poster_path"
-      header="title"
-      route="{{ config.route }}"
-    ></app-horizontal-scroll-list>
-  }
+  <app-horizontal-scroll-list
+    [items]="recommendations"
+    [loading]="mediaRecommendations.isLoading()"
+    image="poster_path"
+    header="title"
+  ></app-horizontal-scroll-list>
 </div>

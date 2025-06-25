@@ -10,6 +10,7 @@ import { ScrollItem } from '@shared/components/horizontal-scroll-list/scroll-ite
 import { buildImageUrl, buildProfileImageUrl } from '@utils/image-url';
 import { LanguageService } from './language.service';
 import { ExternalIds } from '@core/models/external-ids.model';
+import { MediaType } from '@core/models/media-type.model';
 
 // Constants for better maintainability
 const POSTER_SIZE = 'w300';
@@ -107,6 +108,7 @@ export class PeopleService {
       credits.cast?.map((credit) => ({
         ...credit,
         poster_path: buildImageUrl(credit.poster_path, POSTER_SIZE),
+        media_type: MediaType.MOVIE,
       })) ?? []
     );
   }
@@ -116,6 +118,7 @@ export class PeopleService {
       credits.cast?.map((credit) => ({
         ...credit,
         poster_path: buildImageUrl(credit.poster_path, POSTER_SIZE),
+        media_type: MediaType.TV,
       })) ?? []
     );
   }

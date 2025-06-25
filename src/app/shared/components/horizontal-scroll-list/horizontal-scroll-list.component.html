@@ -1,15 +1,23 @@
 <div class="scroll" cdkScrollable>
-  @for (item of items(); track item.id) {
-    <a class="scroll__item" [routerLink]="[route(), item.id]">
-      @if (image()) {
-        <img [src]="item[image()!]" [class]="size()" />
-      }
-      @if (header()) {
-        <span class="header">{{ item[header()!] }}</span>
-      }
-      @if (subheader()) {
-        <span class="subheader">{{ item[subheader()!] }}</span>
-      }
-    </a>
+  @if (!loading()) {
+    @for (item of items(); track item.id) {
+      <a class="scroll__item" [routerLink]="[`/${route() ?? item.media_type}`, item.id]">
+        @if (image()) {
+          <img [src]="item[image()!]" [class]="size()" />
+        }
+        @if (header()) {
+          <span class="header">{{ item[header()!] }}</span>
+        }
+        @if (subheader()) {
+          <span class="subheader">{{ item[subheader()!] }}</span>
+        }
+      </a>
+    }
+  } @else {
+    @for (item of skeletonArray; track $index) {
+      <div class="scroll__item skeleton-item">
+        <p-skeleton width="150px" height="225px" />
+      </div>
+    }
   }
 </div>

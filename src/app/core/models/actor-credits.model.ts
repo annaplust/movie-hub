@@ -1,3 +1,5 @@
+import { MediaType } from './media-type.model';
+
 export interface ActorMovieCredit {
   adult: boolean;
   backdrop_path: string | null;
@@ -17,6 +19,7 @@ export interface ActorMovieCredit {
   character: string;
   credit_id: string;
   order: number;
+  media_type: MediaType;
 }
 
 export interface ActorTvShowCredit {
@@ -39,6 +42,7 @@ export interface ActorTvShowCredit {
   episode_count: number;
   first_credit_air_date: string; // ISO date string
   order: number;
+  media_type: MediaType;
 }
 
 export interface ActorCredits<T> {

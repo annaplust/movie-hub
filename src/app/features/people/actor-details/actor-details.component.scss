@@ -38,7 +38,7 @@ h2:not(:first-of-type) {
 }
 
 // Actor hero section
-.actor-hero {
+.hero {
   width: 100%;
   display: flex;
   padding: 20px;
@@ -58,19 +58,17 @@ h2:not(:first-of-type) {
     height: 100%;
   }
 
-  &__image {
-    .actor-hero__portrait {
-      width: 200px;
-      height: auto;
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-      transition: transform 0.3s ease;
-      aspect-ratio: 2/3;
-      object-fit: cover;
+  &__portrait {
+    width: 200px;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    transition: transform 0.3s ease;
+    aspect-ratio: 2/3;
+    object-fit: cover;
 
-      &:hover {
-        transform: scale(1.02);
-      }
+    &:hover {
+      transform: scale(1.02);
     }
   }
 
@@ -94,6 +92,10 @@ h2:not(:first-of-type) {
     line-height: 1.6;
     opacity: 0.95;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
   }
 }
 
@@ -250,7 +252,7 @@ h2:not(:first-of-type) {
 
 // Responsive design
 @media (min-width: 1400px) {
-  .actor-hero {
+  .hero {
     justify-content: center;
 
     &__container {
@@ -274,7 +276,7 @@ h2:not(:first-of-type) {
     }
   }
 
-  .actor-hero {
+  .hero {
     padding: 48px 64px;
     margin-top: 0;
 
@@ -295,7 +297,7 @@ h2:not(:first-of-type) {
       flex: 1;
     }
 
-    &__image .actor-hero__portrait {
+    &__portrait {
       width: 300px;
       height: auto;
       border-radius: 16px;
