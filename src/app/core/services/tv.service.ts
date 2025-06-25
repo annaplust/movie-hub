@@ -5,8 +5,8 @@ import { ExternalIds } from '@core/models/external-ids.model';
 import { TvShowDetails } from '@core/models/tv-details.model';
 import { TvShow } from '@core/models/tv-show.model';
 import { environment } from '@environments/environment';
-import { LanguageService } from './language.service';
 import { buildImageUrl, buildProfileImageUrl } from '@utils/image-url';
+import { LanguageService } from './language.service';
 
 // Constants for better maintainability
 const POSTER_SIZE = 'w300';
@@ -26,7 +26,7 @@ export class TvService {
   readonly selectedTvShowId = signal<number | null>(null);
 
   // Computed values
-  private readonly tvShowEndpoint = computed(() =>
+  private readonly tvEndpoint = computed(() =>
     this.selectedTvShowId() ? `${this.apiUrl}/tv/${this.selectedTvShowId()}` : null,
   );
 
@@ -81,9 +81,9 @@ export class TvService {
   );
 
   // TV show details resources
-  readonly tvShowDetails = httpResource<TvShowDetails | undefined>(
+  readonly tvDetails = httpResource<TvShowDetails | undefined>(
     () => {
-      const endpoint = this.tvShowEndpoint();
+      const endpoint = this.tvEndpoint();
       return endpoint ? `${endpoint}?language=${this.currentLanguage()}` : undefined;
     },
     {
@@ -92,9 +92,9 @@ export class TvService {
     },
   );
 
-  readonly tvShowExternalIds = httpResource<ExternalIds | undefined>(
+  readonly tvExternalIds = httpResource<ExternalIds | undefined>(
     () => {
-      const endpoint = this.tvShowEndpoint();
+      const endpoint = this.tvEndpoint();
       return endpoint ? `${endpoint}/external_ids` : undefined;
     },
     {
@@ -102,9 +102,9 @@ export class TvService {
     },
   );
 
-  readonly tvShowCredits = httpResource<Credits | undefined>(
+  readonly tvCredits = httpResource<Credits | undefined>(
     () => {
-      const endpoint = this.tvShowEndpoint();
+      const endpoint = this.tvEndpoint();
       return endpoint ? `${endpoint}/credits` : undefined;
     },
     {
@@ -113,9 +113,9 @@ export class TvService {
     },
   );
 
-  readonly tvShowRecommendations = httpResource<TvShow[]>(
+  readonly tvRecommendations = httpResource<TvShow[]>(
     () => {
-      const endpoint = this.tvShowEndpoint();
+      const endpoint = this.tvEndpoint();
       return endpoint ? `${endpoint}/recommendations?language=${this.currentLanguage()}` : undefined;
     },
     {
@@ -124,9 +124,9 @@ export class TvService {
     },
   );
 
-  readonly tvShowSimilar = httpResource<TvShow[]>(
+  readonly tvSimilar = httpResource<TvShow[]>(
     () => {
-      const endpoint = this.tvShowEndpoint();
+      const endpoint = this.tvEndpoint();
       return endpoint ? `${endpoint}/similar?language=${this.currentLanguage()}` : undefined;
     },
     {
@@ -137,7 +137,7 @@ export class TvService {
 
   readonly similarTvShows = httpResource<TvShow[]>(
     () => {
-      const endpoint = this.tvShowEndpoint();
+      const endpoint = this.tvEndpoint();
       return endpoint ? `${endpoint}/similar?language=${this.currentLanguage()}` : undefined;
     },
     {
@@ -184,7 +184,7 @@ export class TvService {
         ?.filter((crew) => CREW_JOBS_FILTER.includes(crew.job.toLowerCase() as (typeof CREW_JOBS_FILTER)[number]))
         .map((crew) => ({
           ...crew,
-          job: crew.job.toLowerCase(),
+          job: crew.job.toLowerCase().replace(' ', ''),
           profile_path: buildProfileImageUrl(crew.profile_path),
         }))
         .sort((a, b) => a.job.localeCompare(b.job)) ?? [];

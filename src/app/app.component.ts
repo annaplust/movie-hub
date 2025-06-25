@@ -12,7 +12,7 @@ import { Language, LanguageService } from '@core/services/language.service';
 })
 export class AppComponent {
   private router = inject(Router);
-  title = 'movie-hub';
+  title = 'MHDB';
 
   onSearch(phrase: string) {
     this.router.navigate(['/search', phrase]);

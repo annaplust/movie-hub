@@ -24,7 +24,9 @@
     "novel": "Powieść",
     "director": "Reżyser",
     "screenplay": "Scenariusz",
-    "producer": "Producent"
+    "producer": "Producent",
+    "co-producer": "Koproducent",
+    "executiveproducer": "Producent Wykonawczy"
   },
   "genre": {
     "action": "Akcja",

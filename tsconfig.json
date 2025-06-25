@@ -22,7 +22,8 @@
       "@core/*": ["./src/app/core/*"],
       "@utils/*": ["./src/app/utils/*"],
       "@shared/*": ["./src/app/shared/*"],
-      "@environments/*": ["./src/environments/*"]
+      "@environments/*": ["./src/environments/*"],
+      "@mocks/*": ["./src/mocks/*"]
     }
   },
   "angularCompilerOptions": {

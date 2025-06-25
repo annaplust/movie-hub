@@ -29,7 +29,9 @@
     "novel": "Novel",
     "director": "Director",
     "screenplay": "Screenplay",
-    "producer": "Producer"
+    "producer": "Producer",
+    "co-producer": "Co-Producer",
+    "executiveproducer": "Executive Producer"
   },
   "genre": {
     "action": "Action",
