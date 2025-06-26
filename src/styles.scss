@@ -21,16 +21,16 @@ a {
   }
 }
 
-.main-content {
+.content {
   max-width: 1000px;
   margin: auto;
   padding: 16px;
 
-  .content-section {
+  .content__section {
     margin-top: 32px;
     padding: 24px;
 
-    .section-title {
+    .section__title {
       margin-top: 0;
       margin-bottom: 20px;
       font-weight: 700;

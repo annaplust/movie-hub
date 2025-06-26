@@ -1,7 +1,7 @@
 :host {
   width: 100vw;
   position: absolute;
-  margin-top: -56px;
+  margin-top: -72px;
 }
 
 .banner {
@@ -178,7 +178,7 @@ h2:not(:first-of-type) {
 
 @media (min-width: 769px) {
   .banner {
-    height: 656px;
+    height: 660px;
 
     &__overlay {
       background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0.8) 100%);
@@ -194,10 +194,10 @@ h2:not(:first-of-type) {
   }
 
   .info {
-    height: 600px;
-    padding-top: 98px min(5%, 64px) 48px min(5%, 64px);
+    height: 620px;
+    padding: 98px min(5%, 64px) 48px min(5%, 64px);
     position: absolute;
-    top: 56px;
+    top: 40px;
     margin-top: 0;
     background: rgba(0, 0, 0, 0.2);
     -webkit-backdrop-filter: blur(20px);

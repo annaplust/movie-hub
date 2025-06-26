@@ -42,9 +42,9 @@
   </div>
 </div>
 
-<div class="main-content">
-  <section class="content-section">
-    <h2 class="section-title">{{ 'knownFor' | translate }}</h2>
+<div class="content">
+  <section class="content__section section">
+    <h2 class="section__title">{{ 'knownFor' | translate }}</h2>
     <div class="known-for-container">
       <app-horizontal-scroll-list
         [items]="getMostFamousWorks(movieCredits, tvCredits, 10)"
@@ -55,8 +55,8 @@
     </div>
   </section>
 
-  <section class="content-section">
-    <h2 class="section-title">{{ 'details' | translate }}</h2>
+  <section class="content__section section">
+    <h2 class="section__title">{{ 'details' | translate }}</h2>
 
     <div class="personal-details">
       @if (actor) {
@@ -86,8 +86,8 @@
   </section>
 
   @if (movieCredits && tvCredits) {
-    <section class="content-section">
-      <h2 class="section-title">{{ 'filmography' | translate }}</h2>
+    <section class="content__section section">
+      <h2 class="section__title">{{ 'filmography' | translate }}</h2>
       <div class="filmography-table">
         <p-table [value]="getCombinedCredits(movieCredits, tvCredits)" class="credits-table">
           <ng-template pTemplate="body" let-credit let-i="rowIndex">
@@ -129,8 +129,8 @@
     </section>
   }
 
-  <section class="content-section">
-    <h2 class="section-title">{{ 'externalLinks' | translate }}</h2>
+  <section class="content__section section">
+    <h2 class="section__title">{{ 'externalLinks' | translate }}</h2>
     @if (externalIds) {
       <div class="external-links-container">
         <app-external-links [ids]="externalIds"></app-external-links>

@@ -14,23 +14,23 @@
 }
 
 <div class="content">
-  <div class="content__area">
-    <h2>{{ 'trendingToday' | translate }}</h2>
+  <section class="content__section section">
+    <h2 class="section__title">{{ 'trendingToday' | translate }}</h2>
     <app-horizontal-scroll-list
       [items]="trendingDay"
       [loading]="trendingDayTvShows.isLoading()"
       image="poster_path"
       header="title"
     ></app-horizontal-scroll-list>
-  </div>
+  </section>
 
-  <div class="content__area">
-    <h2>{{ 'popular' | translate }}</h2>
+  <section class="content__section section">
+    <h2 class="section__title">{{ 'popular' | translate }}</h2>
     <app-horizontal-scroll-list
       [items]="popular"
       [loading]="popularTvShows.isLoading()"
       image="poster_path"
       header="title"
     ></app-horizontal-scroll-list>
-  </div>
+  </section>
 </div>

@@ -1,7 +1,8 @@
 :host {
   width: 100vw;
   position: absolute;
-  margin-top: -56px;
+  margin-top: -72px;
+  left: 0;
 }
 
 .content {
@@ -9,7 +10,7 @@
   margin: auto;
   padding: 16px;
 
-  &__area {
+  &__section {
     margin-top: 56px;
   }
 }
