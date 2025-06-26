@@ -1,44 +1,112 @@
-<a routerLink="/" class="title">
-  <span>MHDB</span>
-</a>
+<div class="navbar-desktop">
+  <a routerLink="/" class="title">
+    <span>MHDB</span>
+  </a>
 
-<div class="links">
-  <a routerLink="/movies" routerLink="/movies">Movies</a>
-  <a routerLink="/movies" routerLink="/tv">TV Shows</a>
+  <div class="links">
+    <a routerLink="/movies">Movies</a>
+    <a routerLink="/tv">TV Shows</a>
+  </div>
+
+  <div class="search">
+    <div class="search__field">
+      <p-iconfield>
+        <input pInputText placeholder="Movies, Shows, Actors" type="text" pSize="small" [(ngModel)]="searchPhrase" />
+        @if (searchPhrase) {
+          <p-button
+            variant="text"
+            severity="secondary"
+            size="small"
+            styleClass="search-clear-btn"
+            (click)="onClearSearchPhrase()"
+          >
+            <fa-icon [icon]="faXmark" alt="clear"></fa-icon>
+          </p-button>
+        }
+      </p-iconfield>
+    </div>
+    <p-button size="small" (click)="onSearch()">
+      <fa-icon [icon]="faMagnifyingGlass" alt="search"></fa-icon>
+    </p-button>
+  </div>
+
+  <div class="language">
+    <p-select
+      [options]="languages"
+      [(ngModel)]="selectedLanguage"
+      optionLabel="name"
+      size="small"
+      (onChange)="onLanguageChange()"
+    />
+  </div>
 </div>
 
-<!-- <div class="theme">
-  <p-toggleswitch [(ngModel)]="isDarkMode" (onChange)="onThemeChange()" />
-</div> -->
+<div class="navbar-mobile">
+  <a routerLink="/" class="title-mobile" (click)="closeMobileMenu()">
+    <span>MHDB</span>
+  </a>
 
-<div class="search">
-  <div class="search__field">
-    <p-iconfield>
-      <input pInputText placeholder="Movies, Shows, Actors" type="text" pSize="small" [(ngModel)]="searchPhrase" />
-      @if (searchPhrase) {
-        <p-button
-          variant="text"
-          severity="secondary"
-          size="small"
-          styleClass="search-clear-btn"
-          (click)="onClearSearchPhrase()"
-        >
-          <fa-icon [icon]="faXmark" alt="clear"></fa-icon>
-        </p-button>
-      }
-    </p-iconfield>
+  <div class="search-mobile">
+    <div class="search__field">
+      <p-iconfield>
+        <input pInputText placeholder="Search..." type="text" pSize="small" [(ngModel)]="searchPhrase" />
+        @if (searchPhrase) {
+          <p-button
+            variant="text"
+            severity="secondary"
+            size="small"
+            styleClass="search-clear-btn"
+            (click)="onClearSearchPhrase()"
+          >
+            <fa-icon [icon]="faXmark" alt="clear"></fa-icon>
+          </p-button>
+        }
+      </p-iconfield>
+    </div>
+    <p-button size="small" (click)="onSearch()">
+      <fa-icon [icon]="faMagnifyingGlass" alt="search"></fa-icon>
+    </p-button>
   </div>
-  <p-button size="small" (click)="onSearch()">
-    <fa-icon [icon]="faMagnifyingGlass" alt="search"></fa-icon>
+
+  <p-button variant="text" size="small" class="hamburger-btn" (click)="toggleMobileMenu()">
+    <fa-icon [icon]="faBars" alt="menu"></fa-icon>
   </p-button>
 </div>
 
-<div class="language">
-  <p-select
-    [options]="languages"
-    [(ngModel)]="selectedLanguage"
-    optionLabel="name"
-    size="small"
-    (onChange)="onLanguageChange()"
-  />
-</div>
+@if (isMobileMenuOpen()) {
+  <div class="mobile-menu-overlay" (click)="closeMobileMenu()">
+    <div class="mobile-menu" (click)="$event.stopPropagation()">
+      <div class="mobile-menu__header">
+        <span class="mobile-menu__title">Menu</span>
+        <p-button variant="text" size="small" class="close-btn" (click)="closeMobileMenu()">
+          <fa-icon [icon]="faXmark" alt="close"></fa-icon>
+        </p-button>
+      </div>
+
+      <div class="mobile-menu__content">
+        <div class="mobile-menu__links">
+          <a routerLink="/movies" routerLinkActive="active" (click)="closeMobileMenu()"> Movies </a>
+          <a routerLink="/tv" routerLinkActive="active" (click)="closeMobileMenu()"> TV Shows </a>
+        </div>
+
+        <div class="mobile-menu__settings">
+          <div class="setting-item">
+            <label>Language</label>
+            <p-select
+              [options]="languages"
+              [(ngModel)]="selectedLanguage"
+              optionLabel="name"
+              size="small"
+              (onChange)="onLanguageChange()"
+            />
+          </div>
+
+          <!-- <div class="setting-item">
+            <label>Dark Mode</label>
+            <p-toggleswitch [(ngModel)]="isDarkMode" (onChange)="onThemeChange()" />
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+}

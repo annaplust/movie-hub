@@ -195,7 +195,7 @@ h2:not(:first-of-type) {
 
   .info {
     height: 600px;
-    padding: 48px 64px;
+    padding-top: 98px min(5%, 64px) 48px min(5%, 64px);
     position: absolute;
     top: 56px;
     margin-top: 0;

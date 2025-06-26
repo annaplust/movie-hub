@@ -1,15 +1,15 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Language, LanguageService } from '@core/services/language.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faClapperboard, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faClapperboard, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
-import { Language, LanguageService } from '@core/services/language.service';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 @Component({
   selector: 'app-navbar',
@@ -41,12 +41,14 @@ export class NavbarComponent {
   faClapperboard = faClapperboard;
   faMagnifyingGlass = faMagnifyingGlass;
   faXmark = faXmark;
+  faBars = faBars;
 
   // Form values
   searchPhrase = '';
   selectedLanguage = this.languages.find((l) => l.code === this.languageService.currentLanguage()) ?? this.languages[0];
 
   isDarkMode = false;
+  isMobileMenuOpen = signal(false);
 
   onThemeChange() {
     if (this.isDarkMode) {
@@ -73,5 +75,13 @@ export class NavbarComponent {
 
   onLanguageChange() {
     this.languageService.changeLanguage(this.selectedLanguage.code);
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen.set(!this.isMobileMenuOpen());
+  }
+
+  closeMobileMenu() {
+    this.isMobileMenuOpen.set(false);
   }
 }
