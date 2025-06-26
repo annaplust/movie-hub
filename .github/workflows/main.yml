@@ -21,6 +21,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Set environment file
+        run: node set-env.js
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+
       - name: Build app
         run: npm run build -- --configuration=production
 
