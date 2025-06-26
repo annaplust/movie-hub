@@ -1,11 +1,36 @@
-<h2>Trending today</h2>
-@if (!trendingWeekTvShows.isLoading()) {
-  <app-horizontal-scroll-list
-    [items]="trendingWeekTvShows.value()"
-    image="poster_path"
-    header="name"
-    size="lg"
-  ></app-horizontal-scroll-list>
+@let trendingDay = trendingDayTvShows.value();
+@let trendingWeek = trendingWeekTvShows.value();
+@let popular = popularTvShows.value();
+
+@if (trendingWeekTvShows.isLoading()) {
+  <p-skeleton width="100%" height="648px" />
 } @else {
-  loading...
+  <app-banner
+    [items]="trendingWeek"
+    [loading]="trendingWeekTvShows.isLoading()"
+    title="name"
+    releaseDate="first_air_date"
+  ></app-banner>
 }
+
+<div class="content">
+  <div class="content__area">
+    <h2>{{ 'trendingToday' | translate }}</h2>
+    <app-horizontal-scroll-list
+      [items]="trendingDay"
+      [loading]="trendingDayTvShows.isLoading()"
+      image="poster_path"
+      header="title"
+    ></app-horizontal-scroll-list>
+  </div>
+
+  <div class="content__area">
+    <h2>{{ 'popular' | translate }}</h2>
+    <app-horizontal-scroll-list
+      [items]="popular"
+      [loading]="popularTvShows.isLoading()"
+      image="poster_path"
+      header="title"
+    ></app-horizontal-scroll-list>
+  </div>
+</div>

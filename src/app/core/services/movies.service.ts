@@ -7,6 +7,7 @@ import { Movie } from '@core/models/movie.model';
 import { environment } from '@environments/environment';
 import { LanguageService } from './language.service';
 import { buildImageUrl, buildProfileImageUrl } from '@utils/image-url';
+import { MediaType } from '@core/models/media-type.model';
 
 // Constants for better maintainability
 const POSTER_SIZE = 'w300';
@@ -129,6 +130,7 @@ export class MoviesService {
     return data.results.map((movie) => ({
       ...movie,
       poster_path: buildImageUrl(movie.poster_path, POSTER_SIZE),
+      media_type: MediaType.MOVIE,
     }));
   }
 

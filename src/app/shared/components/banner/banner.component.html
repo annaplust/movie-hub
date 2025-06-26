@@ -1,29 +1,75 @@
-<p-carousel [value]="movies()" [numVisible]="1" [numScroll]="1" showNavigators="false" autoplayInterval="10000">
-  <ng-template let-movie #item>
-    <div
-      class="banner"
-      [style.backgroundImage]="
-        'url(' + 'https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/' + movie.backdrop_path + ')'
-      "
-    >
-      <div class="banner__overlay">
-        <a class="info" [routerLink]="['/movie', movie.id]">
-          <div class="rating-release">
-            <div class="rating">
-              <fa-icon [icon]="faStar"></fa-icon>
-              <span>{{ movie.vote_average | number: '1.1-1' }}</span>
+<!-- banner.component.html -->
+<p-carousel [value]="items()" [numVisible]="1" [numScroll]="1" [showNavigators]="false" [autoplayInterval]="10000">
+  <ng-template let-item #item>
+    @if (!loading()) {
+      <div class="banner" [style.backgroundImage]="'url(' + getImageUrl(item) + ')'">
+        <div class="banner__overlay">
+          <a class="info" [routerLink]="getRouterLink(item)">
+            <!-- Rating and Release Date Row -->
+            @if (showRating() || showReleaseDate()) {
+              <div class="rating-release">
+                @if (showRating()) {
+                  <div class="rating">
+                    <fa-icon [icon]="faStar"></fa-icon>
+                    <span>{{ getFieldValue(item, 'vote_average') | number: '1.1-1' }}</span>
+                  </div>
+                }
+                @if (showReleaseDate() && releaseDate()) {
+                  <div class="release">{{ getFieldValue(item, releaseDate()) | date: 'yyyy' }}</div>
+                }
+              </div>
+            }
+
+            <!-- Genres -->
+            @if (showGenres()) {
+              <div class="genres">
+                @for (genre of getFieldValue(item, 'genre_ids'); track genre) {
+                  <div class="genres__item">
+                    {{ GenreTranslationMap[genre] | translate }}
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Title -->
+            @if (title()) {
+              <div class="title">{{ getFieldValue(item, title()) }}</div>
+            }
+
+            <!-- Description -->
+            @if (showDescription()) {
+              <div class="description">{{ getFieldValue(item, 'overview') }}</div>
+            }
+          </a>
+        </div>
+      </div>
+    } @else {
+      <!-- Loading skeleton -->
+      <div class="banner banner--skeleton">
+        <div class="banner__overlay">
+          <div class="info">
+            <div class="rating-release">
+              @if (showRating()) {
+                <p-skeleton width="80px" height="20px" />
+              }
+              @if (showReleaseDate()) {
+                <p-skeleton width="60px" height="20px" />
+              }
             </div>
-            <div class="release">{{ movie.release_date | date: 'yyyy' }}</div>
-          </div>
-          <div class="genres">
-            @for (genre of movie.genre_ids; track genre) {
-              <div class="genres__item">{{ GenreTranslationMap[genre] | translate }}</div>
+            @if (showGenres()) {
+              <div class="genres">
+                <p-skeleton width="120px" height="24px" />
+              </div>
+            }
+            @if (title()) {
+              <p-skeleton width="300px" height="40px" />
+            }
+            @if (showDescription()) {
+              <p-skeleton width="100%" height="60px" />
             }
           </div>
-          <div class="title">{{ movie.title }}</div>
-          <div class="description">{{ movie.overview }}</div>
-        </a>
+        </div>
       </div>
-    </div>
+    }
   </ng-template>
 </p-carousel>

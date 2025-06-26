@@ -1,4 +1,4 @@
-import { Component, input, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TvService } from '@core/services/tv.service';
 import { MediaDetailsConfig } from '@shared/models/media.details.config';

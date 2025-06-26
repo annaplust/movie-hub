@@ -7,6 +7,7 @@ import { TvShow } from '@core/models/tv-show.model';
 import { environment } from '@environments/environment';
 import { buildImageUrl, buildProfileImageUrl } from '@utils/image-url';
 import { LanguageService } from './language.service';
+import { MediaType } from '@core/models/media-type.model';
 
 // Constants for better maintainability
 const POSTER_SIZE = 'w300';
@@ -43,7 +44,7 @@ export class TvService {
     () => `${this.apiUrl}/trending/tv/week?language=${this.currentLanguage()}`,
     {
       defaultValue: [],
-      parse: (data) => this.parseTvShowResults(data as ApiResponse<TvShow>),
+      parse: (data) => this.parseTvShowResults(data as ApiResponse<TvShow>).splice(0, 10),
     },
   );
 
@@ -157,6 +158,7 @@ export class TvService {
       ...show,
       poster_path: buildImageUrl(show.poster_path, POSTER_SIZE),
       backdrop_path: buildImageUrl(show.backdrop_path, 'w1280'),
+      media_type: MediaType.TV,
     }));
   }
 
