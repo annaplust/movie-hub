@@ -13,7 +13,7 @@ import { MediaType } from '@core/models/media-type.model';
 import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
-  selector: 'app-media-detailss',
+  selector: 'app-media-details',
   imports: [
     CommonModule,
     HorizontalScrollListComponent,
