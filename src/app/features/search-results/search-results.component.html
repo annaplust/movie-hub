@@ -1,12 +1,361 @@
-@if (multiSearchResource.isLoading()) {
-  loading...
-} @else {
-  @for (result of multiSearchResource.value(); track result.imageUrl) {
-    <a [routerLink]="[result.link]">
-      <img [src]="result.imageUrl" />
-      <p>{{ result.name }}</p>
-    </a>
-  } @empty {
-    No results
-  }
-}
+<div class="search-page">
+  <div class="search-page__header">
+    <div class="search-page__title">
+      <h1>
+        @if (searchQuery()) {
+          Search results for "{{ searchQuery() }}"
+        } @else {
+          Discover {{ currentContentType }}
+        }
+      </h1>
+      @if (results().length > 0) {
+        <p class="search-page__count">{{ results().length }} {{ currentContentType.toLowerCase() }} found</p>
+      }
+    </div>
+
+    <!-- Content Type Toggle -->
+    <div class="search-page__content-toggle">
+      <div class="content-toggle">
+        <div>
+          <span> Movies</span>
+          <p-toggleswitch [(ngModel)]="isShowingTvShows" (onChange)="onContentTypeToggle()" />
+          <span>TV Shows</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Filter Toggle -->
+    <button class="search-page__filter-toggle" (click)="toggleMobileFilters()" [class.active]="showMobileFilters()">
+      <fa-icon [icon]="faFilter"></fa-icon>
+      Filters
+      @if (activeFiltersCount() > 0) {
+        <span class="filter-count">{{ activeFiltersCount() }}</span>
+      }
+    </button>
+  </div>
+
+  <div class="search-page__content">
+    <!-- Filters Sidebar -->
+    <aside class="search-page__filters" [class.search-page__filters--mobile-open]="showMobileFilters()">
+      <div class="filters">
+        <div class="filters__header">
+          <h3>{{ 'filters' | translate }}</h3>
+          <div class="filters__actions">
+            @if (activeFiltersCount() > 0) {
+              <button class="filters__clear" (click)="clearAllFilters()">{{ 'clearAll' | translate }}</button>
+            }
+            <button class="filters__close-mobile" (click)="toggleMobileFilters()">
+              <fa-icon [icon]="faTimes"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sort Filter -->
+        <div class="filter-section">
+          <button class="filter-section__header" (click)="toggleFilterSection('sort')">
+            <span>Sort By</span>
+            <fa-icon [icon]="expandedFilters().sort ? faChevronUp : faChevronDown"></fa-icon>
+          </button>
+          @if (expandedFilters().sort) {
+            <div class="filter-section__content">
+              <p-dropdown
+                [options]="sortOptions"
+                [(ngModel)]="filters().sortBy"
+                (onChange)="onSortChange($event.value)"
+                placeholder="Select sort option"
+                styleClass="w-full"
+              ></p-dropdown>
+            </div>
+          }
+        </div>
+
+        <!-- Media Type Filter - Hide this since we have the toggle -->
+        <!-- Remove or comment out the Media Type Filter section since the toggle replaces it -->
+
+        <!-- Genres Filter -->
+        <div class="filter-section">
+          <button class="filter-section__header" (click)="toggleFilterSection('genres')">
+            <span>Genres</span>
+            <fa-icon [icon]="expandedFilters().genres ? faChevronUp : faChevronDown"></fa-icon>
+          </button>
+          @if (expandedFilters().genres) {
+            <div class="filter-section__content">
+              <div class="filter-section__grid">
+                @for (genre of filters().genres; track genre.value) {
+                  <div class="filter-option">
+                    <p-checkbox
+                      [binary]="true"
+                      [(ngModel)]="genre.checked"
+                      (onChange)="onGenreChange(genre.value, $event.checked)"
+                      [inputId]="'genre-' + genre.value"
+                    ></p-checkbox>
+                    <label [for]="'genre-' + genre.value">{{ genre.label }}</label>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Year Range Filter -->
+        <div class="filter-section">
+          <button class="filter-section__header" (click)="toggleFilterSection('year')">
+            <span>Release Year</span>
+            <fa-icon [icon]="expandedFilters().year ? faChevronUp : faChevronDown"></fa-icon>
+          </button>
+          @if (expandedFilters().year) {
+            <div class="filter-section__content">
+              <div class="filter-range">
+                <div class="filter-range__inputs">
+                  <div class="filter-range__input-group">
+                    <label>From</label>
+                    <p-inputNumber
+                      [(ngModel)]="filters().yearRange.current[0]"
+                      [min]="filters().yearRange.min"
+                      [max]="filters().yearRange.max"
+                      [showButtons]="false"
+                      (onInput)="onYearMinChange($event.value || filters().yearRange.min)"
+                      styleClass="year-input"
+                    ></p-inputNumber>
+                  </div>
+                  <div class="filter-range__input-group">
+                    <label>To</label>
+                    <p-inputNumber
+                      [(ngModel)]="filters().yearRange.current[1]"
+                      [min]="filters().yearRange.min"
+                      [max]="filters().yearRange.max"
+                      [showButtons]="false"
+                      (onInput)="onYearMaxChange($event.value || filters().yearRange.max)"
+                      styleClass="year-input"
+                    ></p-inputNumber>
+                  </div>
+                </div>
+                <p-slider
+                  [(ngModel)]="filters().yearRange.current"
+                  [range]="true"
+                  [min]="filters().yearRange.min"
+                  [max]="filters().yearRange.max"
+                  [step]="1"
+                  (onSlideEnd)="onYearRangeChange($event.values)"
+                  styleClass="w-full"
+                ></p-slider>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Rating Filter -->
+        <div class="filter-section">
+          <button class="filter-section__header" (click)="toggleFilterSection('rating')">
+            <span>Rating</span>
+            <fa-icon [icon]="expandedFilters().rating ? faChevronUp : faChevronDown"></fa-icon>
+          </button>
+          @if (expandedFilters().rating) {
+            <div class="filter-section__content">
+              <div class="filter-range">
+                <div class="filter-range__inputs">
+                  <div class="filter-range__input-group">
+                    <label>
+                      <fa-icon [icon]="faStar"></fa-icon>
+                      Min Rating
+                    </label>
+                    <p-inputNumber
+                      [(ngModel)]="filters().rating.current[0]"
+                      [min]="filters().rating.min"
+                      [max]="filters().rating.max"
+                      [step]="0.1"
+                      [minFractionDigits]="1"
+                      [maxFractionDigits]="1"
+                      [showButtons]="false"
+                      (onInput)="onRatingMinChange($event.value || filters().rating.min)"
+                      styleClass="rating-input"
+                    ></p-inputNumber>
+                  </div>
+                  <div class="filter-range__input-group">
+                    <label>
+                      <fa-icon [icon]="faStar"></fa-icon>
+                      Max Rating
+                    </label>
+                    <p-inputNumber
+                      [(ngModel)]="filters().rating.current[1]"
+                      [min]="filters().rating.min"
+                      [max]="filters().rating.max"
+                      [step]="0.1"
+                      [minFractionDigits]="1"
+                      [maxFractionDigits]="1"
+                      [showButtons]="false"
+                      (onInput)="onRatingMaxChange($event.value || filters().rating.max)"
+                      styleClass="rating-input"
+                    ></p-inputNumber>
+                  </div>
+                </div>
+                <p-slider
+                  [(ngModel)]="filters().rating.current"
+                  [range]="true"
+                  [min]="filters().rating.min"
+                  [max]="filters().rating.max"
+                  [step]="0.1"
+                  (onSlideEnd)="onRatingRangeChange($event.values)"
+                  styleClass="w-full"
+                ></p-slider>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Runtime Filter -->
+        <div class="filter-section">
+          <button class="filter-section__header" (click)="toggleFilterSection('runtime')">
+            <span>Runtime</span>
+            <fa-icon [icon]="expandedFilters().runtime ? faChevronUp : faChevronDown"></fa-icon>
+          </button>
+          @if (expandedFilters().runtime) {
+            <div class="filter-section__content">
+              <div class="filter-range">
+                <div class="filter-range__inputs">
+                  <div class="filter-range__input-group">
+                    <label>Min (minutes)</label>
+                    <p-inputNumber
+                      [(ngModel)]="filters().runtime.current[0]"
+                      [min]="filters().runtime.min"
+                      [max]="filters().runtime.max"
+                      [step]="5"
+                      [showButtons]="false"
+                      (onInput)="onRuntimeMinChange($event.value || filters().runtime.min)"
+                      styleClass="runtime-input"
+                    ></p-inputNumber>
+                  </div>
+                  <div class="filter-range__input-group">
+                    <label>Max (minutes)</label>
+                    <p-inputNumber
+                      [(ngModel)]="filters().runtime.current[1]"
+                      [min]="filters().runtime.min"
+                      [max]="filters().runtime.max"
+                      [step]="5"
+                      [showButtons]="false"
+                      (onInput)="onRuntimeMaxChange($event.value || filters().runtime.max)"
+                      styleClass="runtime-input"
+                    ></p-inputNumber>
+                  </div>
+                </div>
+                <p-slider
+                  [(ngModel)]="filters().runtime.current"
+                  [range]="true"
+                  [min]="filters().runtime.min"
+                  [max]="filters().runtime.max"
+                  [step]="5"
+                  (onSlideEnd)="onRuntimeRangeChange($event.values)"
+                  styleClass="w-full"
+                ></p-slider>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Language Filter -->
+        <div class="filter-section">
+          <button class="filter-section__header" (click)="toggleFilterSection('language')">
+            <span>Language</span>
+            <fa-icon [icon]="expandedFilters().language ? faChevronUp : faChevronDown"></fa-icon>
+          </button>
+          @if (expandedFilters().language) {
+            <div class="filter-section__content">
+              <p-dropdown
+                [options]="languageOptions"
+                [(ngModel)]="filters().language"
+                (onChange)="onLanguageChange($event.value)"
+                placeholder="Any Language"
+                styleClass="w-full"
+              ></p-dropdown>
+            </div>
+          }
+        </div>
+
+        <!-- Watch Providers Filter -->
+        <div class="filter-section">
+          <button class="filter-section__header" (click)="toggleFilterSection('watchProviders')">
+            <span>Streaming Services</span>
+            <fa-icon [icon]="expandedFilters().watchProviders ? faChevronUp : faChevronDown"></fa-icon>
+          </button>
+          @if (expandedFilters().watchProviders) {
+            <div class="filter-section__content">
+              <div class="filter-section__grid">
+                @for (provider of filters().watchProviders; track provider.value) {
+                  <div class="filter-option">
+                    <p-checkbox
+                      [binary]="true"
+                      [(ngModel)]="provider.checked"
+                      (onChange)="onWatchProviderChange(provider.value, $event.checked)"
+                      [inputId]="'provider-' + provider.value"
+                    ></p-checkbox>
+                    <label [for]="'provider-' + provider.value">{{ provider.label }}</label>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </aside>
+
+    <!-- Mobile Filter Overlay -->
+    @if (showMobileFilters()) {
+      <div class="search-page__overlay" (click)="toggleMobileFilters()"></div>
+    }
+
+    <!-- Results Grid -->
+    <main class="search-page__results">
+      @if (isLoading()) {
+        <div class="search-page__loading">
+          <div class="loading-spinner"></div>
+          <p>
+            @if (searchQuery()) {
+              Searching {{ currentContentType.toLowerCase() }}...
+            } @else {
+              Loading {{ currentContentType.toLowerCase() }}...
+            }
+          </p>
+        </div>
+      } @else {
+        @if (results().length > 0) {
+          <div class="results-grid">
+            @for (result of results(); track result.link) {
+              <a [routerLink]="[result.link]" class="result-card">
+                <div class="result-card__image">
+                  @if (result.imageUrl) {
+                    <img [src]="result.imageUrl" [alt]="result.name" loading="lazy" />
+                  } @else {
+                    <div class="result-card__placeholder">
+                      <fa-icon [icon]="faSearch"></fa-icon>
+                    </div>
+                  }
+                </div>
+                <div class="result-card__content">
+                  <h3 class="result-card__title">{{ result.name }}</h3>
+                  <p class="result-card__type">{{ getResultType(result.link) }}</p>
+                  @if (getResultYear(result)) {
+                    <p class="result-card__year">{{ getResultYear(result) }}</p>
+                  }
+                </div>
+              </a>
+            }
+          </div>
+        } @else {
+          <div class="search-page__empty">
+            <fa-icon [icon]="faSearch"></fa-icon>
+            <h3>No {{ currentContentType.toLowerCase() }} found</h3>
+            @if (searchQuery()) {
+              <p>We couldn't find any {{ currentContentType.toLowerCase() }} for "{{ searchQuery() }}"</p>
+              <button class="search-page__clear-search" (click)="clearSearch()">Clear Search</button>
+            } @else {
+              <p>Try adjusting your filters</p>
+            }
+            @if (activeFiltersCount() > 0) {
+              <button class="search-page__clear-filters" (click)="clearAllFilters()">Clear Filters</button>
+            }
+          </div>
+        }
+      }
+    </main>
+  </div>
+</div>

@@ -9,25 +9,7 @@
   </div>
 
   <div class="search">
-    <div class="search__field">
-      <p-iconfield>
-        <input pInputText placeholder="Movies, Shows, Actors" type="text" pSize="small" [(ngModel)]="searchPhrase" />
-        @if (searchPhrase) {
-          <p-button
-            variant="text"
-            severity="secondary"
-            size="small"
-            styleClass="search-clear-btn"
-            (click)="onClearSearchPhrase()"
-          >
-            <fa-icon [icon]="faXmark" alt="clear"></fa-icon>
-          </p-button>
-        }
-      </p-iconfield>
-    </div>
-    <p-button size="small" (click)="onSearch()">
-      <fa-icon [icon]="faMagnifyingGlass" alt="search"></fa-icon>
-    </p-button>
+    <app-search-input></app-search-input>
   </div>
 
   <div class="language">
@@ -47,25 +29,7 @@
   </a>
 
   <div class="search-mobile">
-    <div class="search__field">
-      <p-iconfield>
-        <input pInputText placeholder="Search..." type="text" pSize="small" [(ngModel)]="searchPhrase" />
-        @if (searchPhrase) {
-          <p-button
-            variant="text"
-            severity="secondary"
-            size="small"
-            styleClass="search-clear-btn"
-            (click)="onClearSearchPhrase()"
-          >
-            <fa-icon [icon]="faXmark" alt="clear"></fa-icon>
-          </p-button>
-        }
-      </p-iconfield>
-    </div>
-    <p-button size="small" (click)="onSearch()">
-      <fa-icon [icon]="faMagnifyingGlass" alt="search"></fa-icon>
-    </p-button>
+    <app-search-input></app-search-input>
   </div>
 
   <p-button variant="text" size="small" class="hamburger-btn" (click)="toggleMobileMenu()">

@@ -10,6 +10,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { SearchInputComponent } from '../search-input/search-input.component';
 
 @Component({
   selector: 'app-navbar',
@@ -24,6 +25,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
     InputIconModule,
     ButtonModule,
     SelectModule,
+    SearchInputComponent,
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',

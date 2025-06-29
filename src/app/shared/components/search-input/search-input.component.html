@@ -1,0 +1,67 @@
+<div class="search">
+  <div class="search__field">
+    <p-iconfield>
+      <input
+        #searchInput
+        pInputText
+        placeholder="Search movies, TV shows, people..."
+        type="text"
+        pSize="small"
+        [(ngModel)]="searchPhrase"
+        (input)="onSearchInput()"
+        (keydown)="onKeyDown($event)"
+        autocomplete="off"
+      />
+      @if (searchPhrase) {
+        <p-button
+          variant="text"
+          severity="secondary"
+          size="small"
+          styleClass="search-clear-btn"
+          (click)="onClearSearchPhrase()"
+        >
+          <fa-icon [icon]="faXmark" alt="clear"></fa-icon>
+        </p-button>
+      }
+    </p-iconfield>
+
+    <!-- Search Results Dropdown -->
+    @if (showDropdown) {
+      <div class="search__dropdown">
+        @if (isLoading) {
+          <div class="search__loading">
+            <span>Searching...</span>
+          </div>
+        } @else {
+          @for (result of searchResults; track result.link; let i = $index) {
+            <div
+              class="search__result"
+              [class.search__result--selected]="i === selectedIndex"
+              (click)="selectResult(result)"
+            >
+              <div class="search__result-content">
+                @if (result.imageUrl) {
+                  <img [src]="result.imageUrl" [alt]="result.name" class="search__result-image" loading="lazy" />
+                }
+                <div class="search__result-text">
+                  <div class="search__result-title">{{ result.name }}</div>
+                  <div class="search__result-type">
+                    {{ getResultType(result.link) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+          @if (searchResults.length === 0 && searchPhrase.length > 0) {
+            <div class="search__no-results">
+              <span>No results found for "{{ searchPhrase }}"</span>
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+  <p-button size="small" (click)="onSearch()">
+    <fa-icon [icon]="faMagnifyingGlass" alt="search"></fa-icon>
+  </p-button>
+</div>

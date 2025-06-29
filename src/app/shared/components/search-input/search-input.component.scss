@@ -1,0 +1,123 @@
+:host {
+  ::ng-deep {
+    .search-clear-btn {
+      padding: 5px;
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+  }
+}
+
+.search {
+  justify-self: end;
+  display: flex;
+  gap: 4px;
+  --p-inputtext-background: transparent;
+  --p-inputtext-border-color: #ffffff;
+  --p-inputtext-color: #ffffff;
+  --p-button-text-secondary-color: #ffffff;
+  --p-inputtext-placeholder-color: #ffffff;
+
+  &__field {
+    position: relative;
+
+    p-button {
+      position: absolute;
+      right: 4px;
+      z-index: 1000;
+      top: 3px;
+      color: #ffffff;
+    }
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 2px;
+  }
+
+  &__loading,
+  &__error,
+  &__no-results {
+    padding: 12px 16px;
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+  }
+
+  &__error {
+    color: #d32f2f;
+  }
+
+  &__result {
+    padding: 12px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover,
+    &--selected {
+      background-color: #f8f9fa;
+    }
+
+    &--selected {
+      background-color: #e3f2fd;
+    }
+  }
+
+  &__result-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__result-image {
+    width: 40px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  &__result-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__result-title {
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__result-type {
+    color: #666;
+    font-size: 12px;
+    text-transform: capitalize;
+    margin-top: 2px;
+  }
+}
+
+@media (min-width: 769px) {
+  .search__field input {
+    width: 320px;
+  }
+}
